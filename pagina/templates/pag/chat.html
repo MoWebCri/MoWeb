@@ -1,0 +1,241 @@
+{% extends 'pag/base.html' %}
+{% load static %}
+
+{% block title %}Chat en Vivo - Servicios de Capacitación y Desarrollo Web{% endblock %}
+
+{% block extra_css %}
+<style>
+    .chat-section {
+        background-color: var(--primary-dark);
+        min-height: calc(100vh - 76px);
+    }
+    .chat-container {
+        height: 500px;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        background-color: #2a2a2a;
+    }
+    .chat-header {
+        background: var(--primary-color);
+        color: white;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+    }
+    .chat-header i {
+        margin-right: 10px;
+        font-size: 1.5rem;
+    }
+    .chat-messages {
+        height: 350px;
+        overflow-y: auto;
+        padding: 15px;
+        background-color: #2a2a2a;
+    }
+    .message {
+        margin-bottom: 15px;
+        max-width: 80%;
+    }
+    .message-user {
+        margin-left: auto;
+        background: var(--accent-color);
+        color: white;
+        border-radius: 15px 15px 0 15px;
+        padding: 10px 15px;
+    }
+    .message-bot {
+        background: #333333;
+        color: white;
+        border-radius: 15px 15px 15px 0;
+        padding: 10px 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+    .chat-input {
+        padding: 15px;
+        background: #2a2a2a;
+        border-top: 1px solid #333;
+    }
+    .typing-indicator {
+        display: none;
+        margin-bottom: 15px;
+        background: #333333;
+        border-radius: 15px 15px 15px 0;
+        padding: 10px 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+    .typing-indicator span {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: #666;
+        border-radius: 50%;
+        margin-right: 5px;
+        animation: typing 1s infinite;
+    }
+    .typing-indicator span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    .typing-indicator span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+    @keyframes typing {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+
+    /* Estilo para el input del chat */
+    .chat-input .form-control {
+        background-color: #333333;
+        border: 1px solid #444;
+        color: white;
+    }
+    .chat-input .form-control::placeholder {
+        color: #888;
+    }
+    .chat-input .form-control:focus {
+        background-color: #333333;
+        border-color: var(--highlight-color);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="chat-section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="text-center mb-4">
+                    <h2 class="section-title">Chat en Vivo</h2>
+                    <p class="lead">¿Tienes alguna pregunta? ¡Chatea con nosotros!</p>
+                </div>
+                
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <i class="fas fa-comments"></i>
+                        <h3 class="mb-0">Asistente Virtual</h3>
+                    </div>
+                    
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message message-bot">
+                            <p>¡Hola! Soy el asistente virtual de Cristian Urrutia. ¿En qué puedo ayudarte hoy?</p>
+                        </div>
+                        
+                        <div class="typing-indicator" id="typing-indicator">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input">
+                        <form id="chat-form">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="user-message" placeholder="Escribe tu mensaje...">
+                                <button class="btn btn-warning" type="submit">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <p class="text-muted">También puedes contactarme por:</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="https://wa.me/56944020230" class="btn btn-success" target="_blank">
+                            <i class="fab fa-whatsapp me-2"></i>WhatsApp
+                        </a>
+                        <a href="{% url 'contacto' %}" class="btn btn-primary">
+                            <i class="fas fa-envelope me-2"></i>Formulario de Contacto
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatMessages = document.getElementById('chat-messages');
+        const chatForm = document.getElementById('chat-form');
+        const userMessageInput = document.getElementById('user-message');
+        const typingIndicator = document.getElementById('typing-indicator');
+        
+        // Respuestas predefinidas
+        const responses = {
+            'hola': '¡Hola! ¿En qué puedo ayudarte hoy?',
+            'precio': 'Mis precios varían según el servicio. Puedes consultar mi página de precios o solicitar una cotización personalizada.',
+            'servicio': 'Ofrezco desarrollo web, capacitación, automatización y más. ¿Hay algún servicio específico que te interese?',
+            'contacto': 'Puedes contactarme por WhatsApp al +56 9 4402 0230 o por email a cristian.urrutia.alvarez.20@gmail.com',
+            'horario': 'Estoy disponible de lunes a viernes de 9:00 a 18:00. También atiendo en horarios especiales con cita previa.',
+            'default': 'Gracias por tu mensaje. Para una respuesta más detallada, por favor utiliza mi formulario de contacto o contáctame por WhatsApp.'
+        };
+        
+        // Función para agregar mensaje al chat
+        function addMessage(message, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'message-user' : 'message-bot'}`;
+            messageDiv.innerHTML = `<p>${message}</p>`;
+            
+            // Insertar antes del indicador de escritura
+            chatMessages.insertBefore(messageDiv, typingIndicator);
+            
+            // Scroll al final
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Función para mostrar indicador de escritura
+        function showTypingIndicator() {
+            typingIndicator.style.display = 'block';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Función para ocultar indicador de escritura
+        function hideTypingIndicator() {
+            typingIndicator.style.display = 'none';
+        }
+        
+        // Función para obtener respuesta
+        function getResponse(message) {
+            message = message.toLowerCase();
+            
+            for (const [key, response] of Object.entries(responses)) {
+                if (message.includes(key)) {
+                    return response;
+                }
+            }
+            
+            return responses.default;
+        }
+        
+        // Manejar envío del formulario
+        chatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const userMessage = userMessageInput.value.trim();
+            if (!userMessage) return;
+            
+            // Agregar mensaje del usuario
+            addMessage(userMessage, true);
+            
+            // Limpiar input
+            userMessageInput.value = '';
+            
+            // Mostrar indicador de escritura
+            showTypingIndicator();
+            
+            // Simular respuesta después de un delay
+            setTimeout(() => {
+                hideTypingIndicator();
+                const botResponse = getResponse(userMessage);
+                addMessage(botResponse);
+            }, 1000 + Math.random() * 1000);
+        });
+    });
+</script>
+{% endblock %} 

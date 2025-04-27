@@ -1,0 +1,710 @@
+{% extends 'pag/portafolio/base_portafolio.html' %}
+{% load static %}
+
+{% block title %}Portfolio - MoWebCri{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Contenedor principal y estilos base */
+    .main-container {
+        margin-left: 15%;
+        margin-right: 5%;
+        padding: 1rem;
+    }
+
+    .section {
+        padding: 3rem 0;
+        background: var(--bg-dark);
+    }
+
+    .section-title {
+        color: var(--text-primary);
+        font-size: 4rem;
+        margin-bottom: 2.5rem;
+        text-align: center;
+        position: relative;
+        padding-top: 1rem;
+        margin-left: 8rem;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 150px;
+        height: 5px;
+        background: var(--accent);
+        border-radius: 3px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-light) 100%);
+        padding: 0;
+        margin-top: -2rem;
+    }
+
+    .hero-content {
+        max-width: 900px;
+        margin: 0 auto;
+        text-align: center;
+        padding: 1rem;
+        padding-top: 0;
+        margin-top: -2rem;
+    }
+
+    .hero-title {
+        font-size: 5rem;
+        font-weight: bold;
+        margin-bottom: 2rem;
+        background: linear-gradient(45deg, var(--text-primary), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: fadeInDown 1s ease;
+    }
+
+    .hero-subtitle {
+        font-size: 3.5rem;
+        color: var(--text-secondary);
+        margin-bottom: 2rem;
+        animation: fadeInUp 1s ease 0.3s forwards;
+        opacity: 0;
+        line-height: 1.3;
+    }
+
+    .hero-description {
+        max-width: 800px;
+        margin: 0 auto;
+        color: var(--text-secondary);
+        font-size: 1.6rem;
+        line-height: 1.7;
+        margin-bottom: 2.5rem;
+        animation: fadeInUp 1s ease 0.6s forwards;
+        opacity: 0;
+    }
+
+    .cta-button {
+        display: inline-block;
+        padding: 1.4rem 3.5rem;
+        background-color: transparent;
+        color: var(--accent);
+        border: 3px solid var(--accent);
+        border-radius: 10px;
+        font-size: 1.5rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        animation: fadeInUp 1s ease 0.9s forwards;
+        opacity: 0;
+        letter-spacing: 1.5px;
+    }
+
+    .cta-button:hover {
+        background-color: rgba(100, 255, 218, 0.1);
+        transform: translateY(-5px);
+        color: var(--accent);
+        box-shadow: 0 5px 20px rgba(100, 255, 218, 0.3);
+    }
+
+    /* Projects Section */
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 1.5rem;
+    }
+
+    .project-card {
+        background: rgba(17, 34, 64, 0.8);
+        border-radius: 15px;
+        padding: 1.5rem;
+        border: 1px solid rgba(100, 255, 218, 0.1);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+    }
+
+    .project-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .project-title {
+        color: var(--accent);
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .project-description {
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .tech-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+    }
+
+    .tech-badge {
+        background: rgba(100, 255, 218, 0.1);
+        color: var(--accent);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+
+    .tech-badge:hover {
+        background: rgba(100, 255, 218, 0.2);
+        transform: translateY(-2px);
+    }
+
+    /* Experiencia Section */
+    .experience-section {
+        padding: 3rem 0;
+    }
+
+    .experience-card {
+        background: rgba(17, 34, 64, 0.8);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(100, 255, 218, 0.1);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+    }
+
+    .experience-card:hover {
+        transform: translateX(10px);
+    }
+
+    .experience-header {
+        border-bottom: 2px solid var(--accent);
+        padding-bottom: 0.8rem;
+        margin-bottom: 1rem;
+    }
+
+    .experience-title {
+        color: var(--accent);
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .experience-company {
+        color: var(--text-primary);
+        font-size: 1.2rem;
+    }
+
+    .experience-date {
+        color: var(--text-secondary);
+        font-style: italic;
+    }
+
+    .experience-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .experience-list li {
+        margin-bottom: 0.8rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .experience-list i {
+        color: var(--accent);
+        margin-top: 0.25rem;
+    }
+
+    .achievements {
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(100, 255, 218, 0.1);
+    }
+
+    .achievements h4 {
+        color: var(--accent);
+        margin-bottom: 1rem;
+    }
+
+    /* Habilidades Section */
+    .skills-section {
+        padding: 3rem 0;
+    }
+
+    .skills-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+
+    .skill-card {
+        background: var(--bg-dark);
+        border-radius: 15px;
+        padding: 1.5rem;
+        border: 1px solid rgba(100, 255, 218, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .skill-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--accent);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease;
+    }
+
+    .skill-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .skill-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .skill-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .skill-icon {
+        width: 50px;
+        height: 50px;
+        background: rgba(100, 255, 218, 0.1);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+    }
+
+    .skill-icon i {
+        font-size: 1.8rem;
+        color: var(--accent);
+    }
+
+    .skill-info h3 {
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .skill-level {
+        height: 6px;
+        background: rgba(100, 255, 218, 0.1);
+        border-radius: 3px;
+        margin: 1rem 0;
+        overflow: hidden;
+    }
+
+    .skill-progress {
+        height: 100%;
+        background: var(--accent);
+        border-radius: 3px;
+        transition: width 1s ease;
+    }
+
+    .skill-details {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    /* Animaciones */
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+        .main-container {
+            margin-left: 5%;
+            margin-right: 5%;
+        }
+        
+        .skills-container {
+            grid-template-columns: 1fr;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.8rem;
+        }
+
+        .projects-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Ajuste para el scroll y offset del navbar */
+    html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 80px; /* Altura del navbar + un poco de espacio */
+    }
+
+    /* Asegurarnos que las secciones tengan suficiente padding superior */
+    section[id] {
+        scroll-margin-top: 80px;
+    }
+
+    .github-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0.8rem 1.5rem;
+        background: rgba(100, 255, 218, 0.1);
+        color: var(--accent);
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+    }
+
+    .github-link:hover {
+        background: rgba(100, 255, 218, 0.2);
+        transform: translateY(-2px);
+        color: var(--accent);
+    }
+
+    .github-link i {
+        font-size: 1.4rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main-container">
+    <!-- Hero Section -->
+    <section id="inicio" class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Cristian Urrutia</h1>
+            <h2 class="hero-subtitle">Desarrollo soluciones web que marcan la diferencia</h2>
+            <p class="hero-description">
+                Soy un Analista Programador especializado en desarrollo web. 
+                Me apasiona crear experiencias digitales que combinen funcionalidad, diseño y usabilidad.
+            </p>
+            <a href="#proyectos" class="cta-button">Ver mi trabajo →</a>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="proyectos" class="section">
+        <h2 class="section-title">Proyectos Destacados</h2>
+        <div class="text-center mb-4">
+            <a href="https://github.com/MoWebCri" target="_blank" class="github-link">
+                <i class="fab fa-github"></i>
+                Ver más proyectos en GitHub
+            </a>
+        </div>
+        <div class="projects-grid">
+            <div class="project-card">
+                <h3 class="project-title">
+                    <i class="fas fa-graduation-cap"></i>
+                    Plataforma Educativa – Accompany SPA
+                </h3>
+                <p class="project-description">
+                    Desarrollo, implementación y personalización de plataformas educativas para clientes empresariales. 
+                    Se configuraron aulas virtuales, gestión de usuarios y permisos personalizados.
+                </p>
+                <div class="tech-stack">
+                    <span class="tech-badge">Python</span>
+                    <span class="tech-badge">Django</span>
+                    <span class="tech-badge">MySQL</span>
+                    <span class="tech-badge">HTML5</span>
+                    <span class="tech-badge">CSS3</span>
+                    <span class="tech-badge">Bootstrap</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <h3 class="project-title">
+                    <i class="fas fa-paw"></i>
+                    Sistema de Reservas para Paseos de Mascotas
+                </h3>
+                <p class="project-description">
+                    Desarrollo de un sistema web para conectar dueños de mascotas con paseadores. 
+                    Incluye gestión de reservas, historial de paseos, calificaciones, login para cliente y paseador.
+                </p>
+                <div class="tech-stack">
+                    <span class="tech-badge">Django</span>
+                    <span class="tech-badge">SQLite</span>
+                    <span class="tech-badge">Bootstrap</span>
+                    <span class="tech-badge">JavaScript</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <h3 class="project-title">
+                    <i class="fas fa-tasks"></i>
+                    Panel de Administración para Cursos
+                </h3>
+                <p class="project-description">
+                    Panel diseñado para permitir la matriculación masiva de usuarios, gestión de roles 
+                    y vinculación de cursos con tokens SENCE. Desarrollado con Django y Bootstrap.
+                </p>
+                <div class="tech-stack">
+                    <span class="tech-badge">Python</span>
+                    <span class="tech-badge">Django</span>
+                    <span class="tech-badge">HTML</span>
+                    <span class="tech-badge">Bootstrap</span>
+                    <span class="tech-badge">PostgreSQL</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experiencia Section -->
+    <section id="experiencia" class="experience-section">
+        <div class="container">
+            <h2 class="section-title mb-5">Experiencia Laboral</h2>
+            <div class="experience-card">
+                <div class="experience-header">
+                    <h3 class="experience-title">Desarrollador Web Full Stack</h3>
+                    <p class="experience-company">Freelance</p>
+                    <span class="experience-date">2022 - Presente</span>
+                </div>
+                <ul class="experience-list">
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Desarrollo de aplicaciones web personalizadas</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Implementación de sistemas de gestión</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Optimización y mantenimiento de sitios web</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="experience-card">
+                <div class="experience-header">
+                    <h3 class="experience-title">Desarrollador Web & Administrador de Plataformas</h3>
+                    <p class="experience-company">Accompany SPA</p>
+                    <span class="experience-date">2023 - 2024</span>
+                </div>
+                <ul class="experience-list">
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Implementación y personalización de plataformas educativas</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Capacitación a usuarios internos y externos</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Desarrollo de páginas informativas y sistemas de gestión</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Soporte técnico a clientes a lo largo del país</span>
+                    </li>
+                </ul>
+                <div class="achievements">
+                    <h4>Logros Destacados:</h4>
+                    <ul class="experience-list">
+                        <li>
+                            <i class="fas fa-trophy"></i>
+                            <span>Reducción del 30% en tiempos de implementación</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-users"></i>
+                            <span>Capacitación exitosa a más de 100 usuarios</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-tasks"></i>
+                            <span>Coordinación efectiva con equipos de diseño, RRHH y TI</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Habilidades Section -->
+    <section id="habilidades" class="skills-section">
+        <div class="container">
+            <h2 class="section-title mb-5">Habilidades Técnicas</h2>
+            <div class="skills-container">
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <div class="skill-icon">
+                            <i class="fab fa-python"></i>
+                        </div>
+                        <div class="skill-info">
+                            <h3>Python (Django)</h3>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="skill-details">Desarrollo de backend, vistas, templates y modelos</p>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <div class="skill-icon">
+                            <i class="fab fa-html5"></i>
+                        </div>
+                        <div class="skill-info">
+                            <h3>HTML5 / CSS3</h3>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 90%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="skill-details">Interfaces limpias y adaptables</p>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <div class="skill-icon">
+                            <i class="fab fa-js"></i>
+                        </div>
+                        <div class="skill-info">
+                            <h3>JavaScript</h3>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 75%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="skill-details">Validaciones, interacción básica</p>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <div class="skill-icon">
+                            <i class="fab fa-bootstrap"></i>
+                        </div>
+                        <div class="skill-info">
+                            <h3>Bootstrap</h3>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="skill-details">Responsive design rápido</p>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <div class="skill-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="skill-info">
+                            <h3>MySQL / PostgreSQL</h3>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="skill-details">Consultas, diseño de bases de datos</p>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <div class="skill-icon">
+                            <i class="fab fa-git-alt"></i>
+                        </div>
+                        <div class="skill-info">
+                            <h3>Git / GitHub</h3>
+                            <div class="skill-level">
+                                <div class="skill-progress" style="width: 70%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="skill-details">Versionado, ramas y despliegue básico</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Mejorado el smooth scroll para los enlaces internos
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                // Calculamos la posición considerando el navbar
+                const navbarHeight = 80; // Altura del navbar
+                const elementPosition = targetElement.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Resaltar sección activa en el navbar
+    const sections = document.querySelectorAll('section[id]');
+    
+    function highlightNavItem() {
+        const scrollY = window.pageYOffset;
+        
+        sections.forEach(section => {
+            const sectionHeight = section.offsetHeight;
+            const sectionTop = section.offsetTop - 100;
+            const sectionId = section.getAttribute('id');
+            
+            if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                document.querySelector(`nav a[href="#${sectionId}"]`)?.classList.add('active');
+            } else {
+                document.querySelector(`nav a[href="#${sectionId}"]`)?.classList.remove('active');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', highlightNavItem);
+    window.addEventListener('load', highlightNavItem);
+</script>
+{% endblock %} 

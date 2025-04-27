@@ -1,0 +1,177 @@
+{% extends "pag/portfolio/base.html" %}
+
+{% block title %}Proyectos - Portfolio{% endblock %}
+
+{% block extra_css %}
+<style>
+    .projects-section {
+        padding: 5rem 0;
+    }
+
+    .section-title {
+        text-align: center;
+        margin-bottom: 4rem;
+        color: var(--text-primary);
+    }
+
+    .project-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 0 1rem;
+    }
+
+    .project-card {
+        background-color: var(--bg-card);
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+    .project-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .project-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .project-content {
+        padding: 1.5rem;
+    }
+
+    .project-title {
+        color: var(--text-primary);
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .project-description {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .project-tag {
+        background-color: rgba(100, 255, 218, 0.1);
+        color: var(--accent-color);
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+    }
+
+    .project-links {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .project-link {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .project-link:hover {
+        color: var(--accent-color);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="projects-section">
+    <div class="container">
+        <h1 class="section-title">Mis Proyectos</h1>
+        <div class="project-grid">
+            <!-- Proyecto 1 -->
+            <article class="project-card">
+                <img src="https://via.placeholder.com/400x200" alt="Sistema de Gestión de Cursos" class="project-image">
+                <div class="project-content">
+                    <h3 class="project-title">Sistema de Gestión de Cursos</h3>
+                    <p class="project-description">
+                        Plataforma completa para la gestión de cursos online con sistema de matriculación, seguimiento de progreso y evaluaciones.
+                    </p>
+                    <div class="project-tags">
+                        <span class="project-tag">Django</span>
+                        <span class="project-tag">PostgreSQL</span>
+                        <span class="project-tag">Bootstrap</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" class="project-link">
+                            <i class="fas fa-external-link-alt"></i>
+                            Demo
+                        </a>
+                        <a href="#" class="project-link">
+                            <i class="fab fa-github"></i>
+                            Código
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Proyecto 2 -->
+            <article class="project-card">
+                <img src="https://via.placeholder.com/400x200" alt="E-commerce Personalizado" class="project-image">
+                <div class="project-content">
+                    <h3 class="project-title">E-commerce Personalizado</h3>
+                    <p class="project-description">
+                        Tienda online moderna con carrito de compras, pasarela de pagos y panel de administración personalizado.
+                    </p>
+                    <div class="project-tags">
+                        <span class="project-tag">React</span>
+                        <span class="project-tag">Node.js</span>
+                        <span class="project-tag">MongoDB</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" class="project-link">
+                            <i class="fas fa-external-link-alt"></i>
+                            Demo
+                        </a>
+                        <a href="#" class="project-link">
+                            <i class="fab fa-github"></i>
+                            Código
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Proyecto 3 -->
+            <article class="project-card">
+                <img src="https://via.placeholder.com/400x200" alt="Dashboard Analítico" class="project-image">
+                <div class="project-content">
+                    <h3 class="project-title">Dashboard Analítico</h3>
+                    <p class="project-description">
+                        Panel de control interactivo con visualización de datos en tiempo real y reportes personalizados.
+                    </p>
+                    <div class="project-tags">
+                        <span class="project-tag">Vue.js</span>
+                        <span class="project-tag">D3.js</span>
+                        <span class="project-tag">Firebase</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" class="project-link">
+                            <i class="fas fa-external-link-alt"></i>
+                            Demo
+                        </a>
+                        <a href="#" class="project-link">
+                            <i class="fab fa-github"></i>
+                            Código
+                        </a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+{% endblock %} 

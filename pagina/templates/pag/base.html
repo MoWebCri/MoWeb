@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Desarrollo Web Profesional{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'img/logo.ico' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/cards.css' %}">
+    <link rel="stylesheet" href="{% static 'css/about.css' %}">
+    <link rel="stylesheet" href="{% static 'css/templates/template-styles.css' %}">
+    {% block extra_css %}{% endblock %}
+    <style>
+        .navbar-brand img {
+            border-radius: 50%;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'inicio' %}">
+                <img src="{% static 'img/logo.ico' %}" alt="Logo" width="50" height="50" class="d-inline-block align-text-center me-2">
+                MoWebCri
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'inicio' %}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'servicios' %}">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'contacto' %}">Contacto</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'portafolio' %}" target="_blank">Portafolio →</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <div class="about-card">
+                        <h3>Acerca de mi trabajo</h3>
+                        <p>Soy un desarrollador web especializado en crear soluciones digitales profesionales y personalizadas. Me enfoco en el desarrollo de sitios web modernos, implementación de plataformas Moodle y soporte técnico integral.</p>
+                        <div class="skills-section">
+                            <h4>Habilidades Principales</h4>
+                            <div class="skills-grid">
+                                <div class="skill-item">
+                                    <i class="fas fa-code"></i>
+                                    <h5>Desarrollo Web</h5>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fas fa-graduation-cap"></i>
+                                    <h5>E-learning</h5>
+                                </div>
+                                <div class="skill-item">
+                                    <i class="fas fa-tools"></i>
+                                    <h5>Soporte Técnico</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <div class="contact-info">
+                        <h4>Información de contacto</h4>
+                        <ul>
+                            <li>
+                                <i class="fas fa-envelope"></i>
+                                <a href="mailto:cristian.urrutia.alvarez.20@gmail.com" title="Enviar correo electrónico">cristian.urrutia.alvarez.20@gmail.com</a>
+                            </li>
+                            <li>
+                                <i class="fas fa-phone"></i>
+                                <a href="tel:+56944020230" title="Llamar">+56 9 4402 0230</a>
+                            </li>
+                            <li>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Chile</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="about-card">
+                        <h3>Enlaces rápidos</h3>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><a href="{% url 'servicios' %}">Servicios</a></li>
+                            <li class="mb-2"><a href="{% url 'contacto' %}">Contacto</a></li>
+                            <li class="mb-2"><a href="https://portafolio-cristian.netlify.app" target="_blank">Ver mi portafolio →</a></li>
+                        </ul>
+                        <div class="social-links mt-4">
+                            <a href="https://github.com/MoWebCri" target="_blank" title="Visita mi GitHub" class="me-3"><i class="fab fa-github fa-2x"></i></a>
+                            <a href="https://linkedin.com/in/cristian-urrutia-aa4185243/" target="_blank" title="Conéctate en LinkedIn"><i class="fab fa-linkedin fa-2x"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="mb-0">&copy; 2024 Cristian Urrutia | Desarrollador Web Profesional</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 

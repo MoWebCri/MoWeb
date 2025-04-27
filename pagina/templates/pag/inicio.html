@@ -1,0 +1,71 @@
+{% extends 'pag/base.html' %}
+{% load static %}
+
+{% block title %}Inicio - Desarrollo Web y Soluciones Digitales{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<header class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Desarrollo Web & Soluciones Digitales</h1>
+        <p class="hero-subtitle">Transformamos ideas en experiencias digitales memorables</p>
+        <div class="hero-buttons">
+        </div>
+    </div>
+</header>
+
+<section id="plantillas" class="plantillas-section">
+    <h2 class="plantillas-title">Plantillas Disponibles</h2>
+    <div class="plantillas-grid">
+        <!-- Plantilla 1 -->
+        <div class="plantilla-card">
+            <img src="{% static 'img/negocio.png' %}" alt="Plantilla Empresarial">
+            <h3>Plantilla Empresarial</h3>
+            <p>Ideal para negocios modernos, con diseño limpio, secciones para servicios y contacto.</p>
+            <a href="{% url 'plantillas:plantilla_negocio' %}" class="btn-demo">Ver Demo</a>
+        </div>
+
+        <!-- Plantilla 2 -->
+        <div class="plantilla-card">
+            <img src="{% static 'img/porta.png' %}" alt="Plantilla Portfolio">
+            <h3>Portafolio Creativo</h3>
+            <p>Perfecta para mostrar tus proyectos, estilo visual fuerte, y secciones dinámicas.</p>
+            <a href="{% url 'plantillas:plantilla_portafolio' %}" class="btn-demo">Ver Demo</a>
+        </div>
+
+        <!-- Plantilla 3 -->
+        <div class="plantilla-card">
+            <img src="{% static 'img/leaning.png' %}" alt="Plantilla E-learning">
+            <h3>E-Learning Pro</h3>
+            <p>Plataforma educativa moderna con sistema de cursos, evaluaciones y seguimiento.</p>
+            <a href="{% url 'plantillas:plantilla_elearning' %}" class="btn-demo">Ver Demo</a>
+        </div>
+
+        <!-- Plantilla 4 -->
+        <div class="plantilla-card">
+            <img src="{% static 'img/icons/car-parts.png' %}" alt="Plantilla Repuestos">
+            <h3>AutoX Repuestos</h3>
+            <p>Tienda especializada en repuestos automotrices con catálogo, filtros y carrito de compras.</p>
+            <a href="{% url 'plantillas:plantilla_repuestos' %}" class="btn-demo">Ver Demo</a>
+        </div>
+    </div>
+</section>
+
+<!-- Sobre mí Section -->
+<section id="about" class="about">
+    <div class="container">
+        <h2 class="section-title">Sobre Mí</h2>
+        <div class="about-grid">
+            <div class="about-card">
+                <h3>Analista Programador</h3>
+                <p>Especialista en desarrollo web, Moodle y soluciones digitales para empresas e instituciones.</p>
+            </div>
+            <div class="about-card">
+                <h3>Soluciones a Medida</h3>
+                <p>Trabajo a partir de tus necesidades reales: automatización, diseño y funcionalidad 100% personalizable.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

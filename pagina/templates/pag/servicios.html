@@ -1,0 +1,68 @@
+{% extends 'pag/base.html' %}
+{% load static %}
+
+{% block title %}Servicios y Precios - Desarrollo Web{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/servicios.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1>Servicios de Desarrollo Web</h1>
+        <p class="lead">Soluciones profesionales y personalizadas para tu presencia digital</p>
+    </div>
+</section>
+
+<!-- Servicios Section -->
+<section class="services-section">
+    <div class="container">
+        <h2 class="section-title">Nuestros Servicios</h2>
+        <div class="row">
+            <!-- Desarrollo Web -->
+            <div class="col-md-4 mb-4">
+                <div class="service-card">
+                    <h3 class="service-title">Desarrollo Web</h3>
+                    <p class="service-description">Creamos sitios web profesionales y personalizados que reflejan la identidad de tu negocio.</p>
+                    <ul class="service-features">
+                        <li>Diseño responsive</li>
+                        <li>SEO optimizado</li>
+                        <li>Código limpio y mantenible</li>
+                    </ul>
+                    <a href="{% url 'contacto' %}" class="btn btn-warning">Solicitar Información</a>
+                </div>
+            </div>
+
+            <!-- E-commerce -->
+            <div class="col-md-4 mb-4">
+                <div class="service-card">
+                    <h3 class="service-title">E-commerce</h3>
+                    <p class="service-description">Implementamos tiendas online completas con todas las funcionalidades necesarias.</p>
+                    <ul class="service-features">
+                        <li>Carrito de compras</li>
+                        <li>Pasarela de pagos</li>
+                        <li>Gestión de inventario</li>
+                    </ul>
+                    <a href="{% url 'contacto' %}" class="btn btn-warning">Solicitar Información</a>
+                </div>
+            </div>
+
+            <!-- Mantenimiento -->
+            <div class="col-md-4 mb-4">
+                <div class="service-card">
+                    <h3 class="service-title">Mantenimiento</h3>
+                    <p class="service-description">Mantenemos tu sitio actualizado, seguro y funcionando perfectamente.</p>
+                    <ul class="service-features">
+                        <li>Actualizaciones regulares</li>
+                        <li>Copias de seguridad</li>
+                        <li>Soporte técnico</li>
+                    </ul>
+                    <a href="{% url 'contacto' %}" class="btn btn-warning">Solicitar Información</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}  

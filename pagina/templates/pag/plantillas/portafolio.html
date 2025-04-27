@@ -1,0 +1,40 @@
+{% extends 'pag/base.html' %}
+{% load static %}
+
+{% block title %}Portafolio - Fernan{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/plantillas/portafolio.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <section id="sobre-mi">
+        <h2>Sobre mí</h2>
+        <p>Soy Fernan, el mejor programador y creador de programas. Me especializo en desarrollo web, soluciones personalizadas y en resolver problemas como si fuera magia.</p>
+    </section>
+
+    <section id="proyectos">
+        <h2>Proyectos destacados</h2>
+        <div class="proyectos-grid">
+            <div class="card">
+                <h3>Sistema de Reservas</h3>
+                <p>Desarrollado en Django, con integración de clientes, paseadores y calificaciones en tiempo real.</p>
+            </div>
+            <div class="card">
+                <h3>Web Educativa</h3>
+                <p>Plataforma en Moodle con roles automatizados y conexión a bases de datos externas.</p>
+            </div>
+            <div class="card">
+                <h3>Aplicación Móvil Ionic</h3>
+                <p>App híbrida con login, notificaciones push y uso de SQLite local para offline mode.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto">
+        <h2>Contacto</h2>
+        <p>¿Tienes un proyecto? ¿Necesitas un experto? Escríbeme a <a href="mailto:fernan.dev@email.com">fernan.dev@email.com</a></p>
+    </section>
+</div>
+{% endblock %}

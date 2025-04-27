@@ -1,0 +1,155 @@
+{% extends 'pag/base.html' %}
+{% load static %}
+
+{% block title %}MoWebCri Academy - Plataforma de Aprendizaje{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/plantillas/elearning.css' %}">
+{% endblock %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 hero-content">
+                    <h1 class="hero-title">Transforma tu futuro con educación de calidad</h1>
+                    <p class="hero-description">Accede a cursos premium diseñados por expertos y desarrolla las habilidades más demandadas del mercado.</p>
+                    <a href="{% url 'plantillas:plantilla_repuestos' %}" class="cta-button">Ver Demo</a>
+                </div>
+                <div class="col-lg-6">
+                    <img src="{% static 'img/class.png' %}" alt="Educación Online" class="img-fluid hero-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cursos Section -->
+    <section class="courses">
+        <div class="container">
+            <h2 class="section-title">Cursos Destacados</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="course-card">
+                        <img src="{% static 'img/course-web.jpg' %}" alt="Desarrollo Web" class="course-image">
+                        <div class="course-content">
+                            <h3 class="course-title">Desarrollo Web Full Stack</h3>
+                            <p>Domina las tecnologías web más demandadas y conviértete en un desarrollador completo.</p>
+                            <div class="course-info">
+                                <span class="course-duration">12 semanas</span>
+                                <span class="course-price">$299</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="course-card">
+                        <img src="{% static 'img/course-design.jpg' %}" alt="Diseño UX/UI" class="course-image">
+                        <div class="course-content">
+                            <h3 class="course-title">Diseño UX/UI Profesional</h3>
+                            <p>Aprende a crear interfaces intuitivas y experiencias de usuario excepcionales.</p>
+                            <div class="course-info">
+                                <span class="course-duration">8 semanas</span>
+                                <span class="course-price">$249</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="course-card">
+                        <img src="{% static 'img/course-data.jpg' %}" alt="Data Science" class="course-image">
+                        <div class="course-content">
+                            <h3 class="course-title">Data Science & Analytics</h3>
+                            <p>Descubre el poder de los datos y aprende a tomar decisiones basadas en evidencia.</p>
+                            <div class="course-info">
+                                <span class="course-duration">10 semanas</span>
+                                <span class="course-price">$349</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">¿Por qué elegirnos?</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h3>Aprendizaje Práctico</h3>
+                        <p>Proyectos reales y ejercicios prácticos para consolidar tus conocimientos.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <h3>Certificación Profesional</h3>
+                        <p>Obtén certificados reconocidos por la industria al completar los cursos.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Mentores Expertos</h3>
+                        <p>Aprende de profesionales con amplia experiencia en la industria.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">Lo que dicen nuestros estudiantes</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"Una experiencia de aprendizaje excepcional. Los cursos son completos y los instructores son excelentes."</p>
+                        <div class="testimonial-author">
+                            <img src="{% static 'img/maria.png' %}" alt="María García" class="author-image">
+                            <div>
+                                <h4>María García</h4>
+                                <p>Desarrolladora Web</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"La mejor inversión en mi carrera. Los conocimientos adquiridos me ayudaron a conseguir mi trabajo soñado."</p>
+                        <div class="testimonial-author">
+                            <img src="{% static 'img/carls.png' %}" alt="Carlos Ruiz" class="author-image">
+                            <div>
+                                <h4>Carlos Ruiz</h4>
+                                <p>UX Designer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"Excelente plataforma, contenido de calidad y una comunidad muy activa. Totalmente recomendado."</p>
+                        <div class="testimonial-author">
+                            <img src="{% static 'img/ana.png' %}" alt="Ana Martínez" class="author-image">
+                            <div>
+                                <h4>Ana Martínez</h4>
+                                <p>Data Analyst</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %} 
