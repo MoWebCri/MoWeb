@@ -1,0 +1,305 @@
+:root {
+    --primary: #0d1117;
+    --secondary: #161b22;
+    --accent: #58a6ff;
+    --text-light: #c9d1d9;
+    --text-muted: #8b949e;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--primary);
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+  
+  .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 2rem 0;
+  }
+  
+  header {
+    background-color: var(--secondary);
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--text-muted);
+  }
+  
+  header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent);
+  }
+  
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: var(--text-light);
+    transition: color 0.3s;
+  }
+  
+  nav a:hover {
+    color: var(--accent);
+  }
+  
+  section h2 {
+    margin-bottom: 1rem;
+    color: var(--accent);
+    font-size: 1.6rem;
+  }
+  
+  .proyectos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 1rem;
+  }
+  
+  .card {
+    background-color: var(--secondary);
+    border: 1px solid var(--text-muted);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(88, 166, 255, 0.2);
+  }
+  
+  footer {
+    text-align: center;
+    padding: 2rem 0;
+    background-color: var(--secondary);
+    border-top: 1px solid var(--text-muted);
+    color: var(--text-muted);
+  }
+  
+  a {
+    color: var(--accent);
+  }
+  
+  /* Estilos para la plantilla de portafolio */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  /* Sección Sobre mí */
+  #sobre-mi {
+    padding: 4rem 0;
+    background: var(--darker-bg);
+    border-radius: 15px;
+    margin-bottom: 3rem;
+  }
+  
+  #sobre-mi h2 {
+    color: var(--neon-cyan);
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  }
+  
+  #sobre-mi p {
+    color: var(--text-light);
+    font-size: 1.2rem;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  /* Sección Proyectos */
+  #proyectos {
+    padding: 4rem 0;
+  }
+  
+  #proyectos h2 {
+    color: var(--neon-cyan);
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  }
+  
+  .proyectos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+  
+  .card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 15px;
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 15px rgba(0, 255, 255, 0.1);
+  }
+  
+  .card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--neon-cyan);
+    box-shadow: 0 8px 25px rgba(0, 255, 255, 0.2);
+  }
+  
+  .card h3 {
+    color: var(--neon-cyan);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+  }
+  
+  .card p {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+    font-size: 1.1rem;
+  }
+  
+  /* Sección Contacto */
+  #contacto {
+    padding: 4rem 0;
+    text-align: center;
+    background: var(--darker-bg);
+    border-radius: 15px;
+    margin-top: 12rem;
+    margin-bottom: 4rem;
+  }
+  
+  .contact-section {
+    position: relative;
+    z-index: 1;
+  }
+  
+  #contacto::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 4px;
+    background: var(--neon-cyan);
+    border-radius: 2px;
+    box-shadow: 0 0 15px var(--neon-cyan);
+  }
+  
+  #contacto h2 {
+    color: var(--neon-cyan);
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  }
+  
+  #contacto p {
+    color: var(--text-light);
+    font-size: 1.2rem;
+    line-height: 1.8;
+  }
+  
+  #contacto a {
+    color: var(--neon-cyan);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  #contacto a:hover {
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  }
+  
+  /* Media Queries */
+  @media (max-width: 992px) {
+    .proyectos-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+    }
+  
+    #sobre-mi,
+    #proyectos,
+    #contacto {
+      padding: 3rem 0;
+    }
+  
+    #sobre-mi h2,
+    #proyectos h2,
+    #contacto h2 {
+      font-size: 2rem;
+    }
+  
+    .proyectos-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    #sobre-mi p,
+    #contacto p {
+      font-size: 1rem;
+    }
+  }
+  
+  /* Navbar */
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: transparent;
+    backdrop-filter: blur(10px);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Ajuste para todas las secciones */
+  section {
+    margin-top: 150px; /* Espacio considerable desde el navbar */
+  }
+  
+  /* Ajuste específico para el hero */
+  .hero {
+    margin-top: 100px;
+  }
+  
+  /* Ajuste para el contenido principal */
+  main {
+    padding-top: 80px;
+  }
+  
+  /* Estilos específicos para la plantilla de repuestos */
+  .repuestos-template .navbar {
+    background: rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .repuestos-template section {
+    padding-top: 120px;
+  }
+  
+  /* Ajuste específico para la sección de servicios */
+  #servicios {
+    padding-top: 5rem; /* Equivalente a pt-5 de Bootstrap */
+    margin-top: 0;
+  }
