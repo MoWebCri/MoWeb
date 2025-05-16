@@ -1,0 +1,358 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Lista de salas -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Salas</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for sala in request.user.salas.all %}
+                    <a href="{% url 'chat:sala_chat' sala.id %}" 
+                       class="list-group-item list-group-item-action {% if sala.id == sala_actual.id %}active{% endif %}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ sala.nombre }}</h6>
+                            <small>{{ sala.ultima_actividad|timesince }}</small>
+                        </div>
+                        <p class="mb-1 text-muted">{{ sala.descripcion|truncatechars:30 }}</p>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sala de chat -->
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-0">{{ sala.nombre }}</h5>
+                        <small class="text-muted">{{ sala.descripcion }}</small>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#buscarModal">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        {% if sala.es_grupo %}
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#participantesModal">
+                            <i class="fas fa-users"></i>
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Mensajes -->
+                <div class="card-body chat-messages" id="chatMessages">
+                    {% for mensaje in mensajes %}
+                    <div class="message {% if mensaje.remitente == request.user %}message-own{% endif %}" data-mensaje-id="{{ mensaje.id }}">
+                        <div class="message-header">
+                            <strong>{{ mensaje.remitente.username }}</strong>
+                            <small class="text-muted">{{ mensaje.fecha_envio|date:"H:i" }}</small>
+                            {% if mensaje.editado %}
+                            <small class="text-muted">(editado)</small>
+                            {% endif %}
+                        </div>
+                        <div class="message-content">
+                            {{ mensaje.contenido }}
+                            {% if mensaje.archivo_adjunto %}
+                            <div class="mt-2">
+                                {% if mensaje.tipo_archivo|slice:":5" == 'image' %}
+                                <img src="{{ mensaje.archivo_adjunto.url }}" class="img-fluid" style="max-height: 200px;">
+                                {% else %}
+                                <a href="{{ mensaje.archivo_adjunto.url }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                    <i class="fas fa-file"></i> Ver archivo
+                                </a>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="message-reactions">
+                            {% for reaccion in mensaje.reacciones.all %}
+                            <span class="badge bg-light text-dark">
+                                {{ reaccion.emoji }} {{ reaccion.usuarios.count }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                        {% if mensaje.remitente == request.user %}
+                        <div class="message-actions">
+                            <button class="btn btn-sm btn-link" onclick="editarMensaje({{ mensaje.id }})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Indicador de escritura -->
+                <div class="card-footer typing-indicator" style="display: none;">
+                    <small class="text-muted">
+                        <i class="fas fa-pencil-alt"></i> <span id="typingUsers"></span> está(n) escribiendo...
+                    </small>
+                </div>
+
+                <!-- Formulario de envío -->
+                <div class="card-footer">
+                    <form id="mensajeForm" class="d-flex">
+                        {% csrf_token %}
+                        <input type="file" id="archivoInput" class="d-none" accept="image/*,.pdf,.doc,.docx">
+                        <button type="button" class="btn btn-outline-secondary me-2" onclick="document.getElementById('archivoInput').click()">
+                            <i class="fas fa-paperclip"></i>
+                        </button>
+                        <input type="text" class="form-control me-2" id="mensajeInput" placeholder="Escribe un mensaje...">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de búsqueda -->
+<div class="modal fade" id="buscarModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Buscar mensajes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="buscarForm">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="buscarInput" placeholder="Buscar en mensajes...">
+                    </div>
+                </form>
+                <div id="resultadosBusqueda"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de participantes -->
+<div class="modal fade" id="participantesModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Participantes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    {% for participante in sala.participantes.all %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ participante.username }}
+                        {% if participante == sala.creado_por %}
+                        <span class="badge bg-primary">Creador</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+let typingTimeout;
+const salaId = {{ sala.id }};
+
+// Función para enviar mensaje
+document.getElementById('mensajeForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const mensajeInput = document.getElementById('mensajeInput');
+    const archivoInput = document.getElementById('archivoInput');
+    const formData = new FormData();
+    
+    formData.append('contenido', mensajeInput.value);
+    if (archivoInput.files.length > 0) {
+        formData.append('archivo', archivoInput.files[0]);
+    }
+    
+    fetch(`/chat/sala/${salaId}/enviar/`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            mensajeInput.value = '';
+            archivoInput.value = '';
+            actualizarEstadoEscritura(false);
+        }
+    });
+});
+
+// Función para actualizar estado de escritura
+function actualizarEstadoEscritura(estaEscribiendo) {
+    fetch('/chat/estado/actualizar/', {
+        method: 'POST',
+        body: JSON.stringify({
+            esta_escribiendo: estaEscribiendo,
+            sala_id: salaId
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    });
+}
+
+// Detectar escritura
+document.getElementById('mensajeInput').addEventListener('input', function() {
+    clearTimeout(typingTimeout);
+    actualizarEstadoEscritura(true);
+    
+    typingTimeout = setTimeout(() => {
+        actualizarEstadoEscritura(false);
+    }, 1000);
+});
+
+// Función para reaccionar a mensajes
+function reaccionarMensaje(mensajeId, emoji) {
+    fetch(`/chat/mensaje/${mensajeId}/reaccionar/`, {
+        method: 'POST',
+        body: JSON.stringify({ emoji: emoji }),
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // Actualizar UI
+        }
+    });
+}
+
+// Función para editar mensaje
+function editarMensaje(mensajeId) {
+    const mensajeElement = document.querySelector(`[data-mensaje-id="${mensajeId}"]`);
+    const contenido = mensajeElement.querySelector('.message-content').textContent;
+    
+    const nuevoContenido = prompt('Editar mensaje:', contenido);
+    if (nuevoContenido && nuevoContenido !== contenido) {
+        fetch(`/chat/mensaje/${mensajeId}/editar/`, {
+            method: 'POST',
+            body: JSON.stringify({ contenido: nuevoContenido }),
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                mensajeElement.querySelector('.message-content').textContent = nuevoContenido;
+                mensajeElement.querySelector('.message-header').innerHTML += ' <small class="text-muted">(editado)</small>';
+            }
+        });
+    }
+}
+
+// Función para buscar mensajes
+document.getElementById('buscarForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const query = document.getElementById('buscarInput').value;
+    
+    fetch(`/chat/sala/${salaId}/buscar/?q=${encodeURIComponent(query)}`)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('resultadosBusqueda').innerHTML = html;
+        });
+});
+
+// WebSocket para actualizaciones en tiempo real
+const chatSocket = new WebSocket(
+    'ws://' + window.location.host + '/ws/chat/' + salaId + '/'
+);
+
+chatSocket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    
+    if (data.type === 'message') {
+        // Agregar nuevo mensaje
+        const mensajesDiv = document.getElementById('chatMessages');
+        mensajesDiv.innerHTML += data.html;
+        mensajesDiv.scrollTop = mensajesDiv.scrollHeight;
+    } else if (data.type === 'typing') {
+        // Actualizar indicador de escritura
+        const typingIndicator = document.querySelector('.typing-indicator');
+        const typingUsers = document.getElementById('typingUsers');
+        
+        if (data.users.length > 0) {
+            typingUsers.textContent = data.users.join(', ');
+            typingIndicator.style.display = 'block';
+        } else {
+            typingIndicator.style.display = 'none';
+        }
+    }
+};
+
+chatSocket.onclose = function(e) {
+    console.error('Chat socket closed unexpectedly');
+};
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.chat-messages {
+    height: 500px;
+    overflow-y: auto;
+}
+
+.message {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #f8f9fa;
+}
+
+.message-own {
+    background-color: #e3f2fd;
+    margin-left: 2rem;
+}
+
+.message-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.message-content {
+    word-break: break-word;
+}
+
+.message-reactions {
+    margin-top: 0.25rem;
+}
+
+.message-actions {
+    display: none;
+    margin-top: 0.25rem;
+}
+
+.message:hover .message-actions {
+    display: block;
+}
+
+.typing-indicator {
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+</style>
+{% endblock %}
+{% endblock %} 

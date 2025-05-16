@@ -1,0 +1,264 @@
+{% extends 'base/base.html' %}
+
+{% block title %}{{ repuesto.nombre }} - AutoX{% endblock %}
+
+{% block extra_css %}
+<style>
+    .detalle-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: var(--text-light);
+        padding: 3rem 0;
+        margin-bottom: 3rem;
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .detalle-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .detalle-header .categoria {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+
+    .repuesto-imagen {
+        background: var(--bg-primary);
+        border-radius: var(--border-radius-lg);
+        padding: 2rem;
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 400px;
+    }
+
+    .repuesto-imagen i {
+        font-size: 8rem;
+        color: var(--text-secondary);
+    }
+
+    .repuesto-info {
+        background: var(--bg-primary);
+        border-radius: var(--border-radius-lg);
+        padding: 2rem;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .repuesto-precio {
+        color: var(--success-color);
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 1.5rem 0;
+    }
+
+    .repuesto-stock {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: var(--border-radius-md);
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+    }
+
+    .repuesto-stock.disponible {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .repuesto-stock.sin-stock {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .detalles-lista {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 2rem 0;
+    }
+
+    .detalles-lista li {
+        padding: 1rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .detalles-lista li:last-child {
+        border-bottom: none;
+    }
+
+    .detalles-lista .label {
+        color: var(--text-secondary);
+        font-weight: 500;
+    }
+
+    .detalles-lista .valor {
+        color: var(--text-primary);
+        font-weight: 600;
+    }
+
+    .form-cantidad {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .form-cantidad .input-group {
+        flex: 1;
+    }
+
+    .form-cantidad .btn-agregar {
+        flex: 2;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--border-radius-md);
+        font-weight: 500;
+        transition: var(--transition-normal);
+    }
+
+    .form-cantidad .btn-agregar:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .form-cantidad .btn-agregar:disabled {
+        background: var(--secondary-color);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .btn-volver {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--border-radius-md);
+        font-weight: 500;
+        transition: var(--transition-normal);
+    }
+
+    .btn-volver:hover {
+        background: var(--bg-tertiary);
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 768px) {
+        .detalle-header {
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .detalle-header h1 {
+            font-size: 2rem;
+        }
+
+        .repuesto-imagen {
+            min-height: 300px;
+        }
+
+        .form-cantidad {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="detalle-header text-center">
+    <div class="container">
+        <div class="categoria mb-2">{{ repuesto.categoria.nombre }}</div>
+        <h1>{{ repuesto.nombre }}</h1>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <!-- Imagen del Repuesto -->
+        <div class="col-lg-6">
+            <div class="repuesto-imagen">
+                {% if repuesto.imagen %}
+                    <img src="{{ repuesto.imagen.url }}" class="img-fluid" alt="{{ repuesto.nombre }}">
+                {% else %}
+                    <i class="fas fa-tools"></i>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Información del Repuesto -->
+        <div class="col-lg-6">
+            <div class="repuesto-info">
+                <div class="repuesto-precio">${{ repuesto.precio|floatformat:0 }} CLP</div>
+                
+                <div class="repuesto-stock {% if repuesto.stock > 0 %}disponible{% else %}sin-stock{% endif %}">
+                    {% if repuesto.stock > 0 %}
+                        <i class="fas fa-check-circle me-2"></i>Disponible ({{ repuesto.stock }} unidades)
+                    {% else %}
+                        <i class="fas fa-times-circle me-2"></i>Sin stock
+                    {% endif %}
+                </div>
+
+                <p class="lead mb-4">{{ repuesto.descripcion }}</p>
+
+                <ul class="detalles-lista">
+                    <li>
+                        <span class="label">Marca del Repuesto</span>
+                        <span class="valor">{{ repuesto.marca }}</span>
+                    </li>
+                    <li>
+                        <span class="label">Marca del Auto</span>
+                        <span class="valor">{{ repuesto.marca_auto }}</span>
+                    </li>
+                    <li>
+                        <span class="label">Modelo del Auto</span>
+                        <span class="valor">{{ repuesto.modelo_auto }}</span>
+                    </li>
+                    <li>
+                        <span class="label">Año del Auto</span>
+                        <span class="valor">{{ repuesto.año_auto }}</span>
+                    </li>
+                    <li>
+                        <span class="label">Categoría</span>
+                        <span class="valor">{{ repuesto.categoria.nombre }}</span>
+                    </li>
+                </ul>
+
+                {% if user.is_authenticated %}
+                    {% if repuesto.stock > 0 %}
+                        <form method="post" action="{% url 'repuestos:agregar_al_carrito' repuesto.id %}" class="form-cantidad">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <span class="input-group-text">Cantidad</span>
+                                <input type="number" name="cantidad" class="form-control" value="1" min="1" max="{{ repuesto.stock }}">
+                            </div>
+                            <button type="submit" class="btn-agregar">
+                                <i class="fas fa-cart-plus me-2"></i>Agregar al Carrito
+                            </button>
+                        </form>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Este repuesto no está disponible en este momento.
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <a href="{% url 'usuarios:login' %}" class="alert-link">Inicia sesión</a> para agregar este repuesto al carrito.
+                    </div>
+                {% endif %}
+
+                <a href="{% url 'repuestos:catalogo' %}" class="btn btn-volver">
+                    <i class="fas fa-arrow-left me-2"></i>Volver al Catálogo
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

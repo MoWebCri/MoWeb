@@ -1,0 +1,472 @@
+{% extends 'base/base.html' %}
+{% load repuestos_extras %}
+
+{% block title %}Carrito de Compras - AutoX{% endblock %}
+
+{% block extra_css %}
+<style>
+    .carrito-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: var(--text-light);
+        padding: 3rem 0;
+        margin-bottom: 3rem;
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .carrito-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .carrito-header p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .carrito-container {
+        background: var(--bg-primary);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+    }
+
+    .carrito-item {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        transition: var(--transition-fast);
+    }
+
+    .carrito-item:last-child {
+        border-bottom: none;
+    }
+
+    .carrito-item:hover {
+        background: var(--bg-secondary);
+    }
+
+    .carrito-item-imagen {
+        width: 100px;
+        height: 100px;
+        background: var(--bg-secondary);
+        border-radius: var(--border-radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .carrito-item-imagen i {
+        font-size: 2.5rem;
+        color: var(--text-secondary);
+    }
+
+    .carrito-item-info {
+        flex-grow: 1;
+    }
+
+    .carrito-item-nombre {
+        color: var(--text-primary);
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .carrito-item-detalles {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .carrito-item-precio {
+        color: var(--success-color);
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .carrito-item-cantidad {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 0 2rem;
+    }
+
+    .btn-cantidad {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-sm);
+        color: var(--text-primary);
+        transition: var(--transition-fast);
+    }
+
+    .btn-cantidad:hover {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
+    }
+
+    .cantidad-input {
+        width: 50px;
+        text-align: center;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-sm);
+        padding: 0.25rem;
+        font-size: 0.875rem;
+    }
+
+    .btn-eliminar {
+        color: var(--danger-color);
+        background: none;
+        border: none;
+        padding: 0.5rem;
+        border-radius: var(--border-radius-sm);
+        transition: var(--transition-fast);
+    }
+
+    .btn-eliminar:hover {
+        background: var(--danger-color);
+        color: white;
+    }
+
+    .carrito-resumen {
+        background: var(--bg-primary);
+        border-radius: var(--border-radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .carrito-resumen h3 {
+        color: var(--text-primary);
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .resumen-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        color: var(--text-secondary);
+    }
+
+    .resumen-total {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 2px solid var(--border-color);
+        color: var(--text-primary);
+        font-weight: 600;
+        font-size: 1.25rem;
+    }
+
+    .resumen-total .total-valor {
+        color: var(--success-color);
+    }
+
+    .btn-comprar {
+        width: 100%;
+        padding: 1rem;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: var(--border-radius-md);
+        font-weight: 500;
+        margin-top: 1.5rem;
+        transition: var(--transition-normal);
+    }
+
+    .btn-comprar:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .carrito-vacio {
+        text-align: center;
+        padding: 3rem;
+        background: var(--bg-primary);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .carrito-vacio i {
+        font-size: 4rem;
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+    }
+
+    .carrito-vacio h3 {
+        color: var(--text-primary);
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .carrito-vacio p {
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .carrito-header {
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .carrito-header h1 {
+            font-size: 2rem;
+        }
+
+        .carrito-item {
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+        }
+
+        .carrito-item-cantidad {
+            margin: 1rem 0;
+        }
+
+        .carrito-resumen {
+            margin-top: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<div class="carrito-header text-center">
+    <div class="container">
+        <h1>Carrito de Compras</h1>
+        <p>Revisa los repuestos que has seleccionado y procede con tu compra.</p>
+    </div>
+</div>
+
+<div class="container">
+    {% if items %}
+        <div class="row">
+            <!-- Lista de Items -->
+            <div class="col-lg-8">
+                <div class="carrito-container">
+                    {% for item in items %}
+                        <div class="carrito-item" id="item-{{ item.id }}">
+                            <div class="carrito-item-imagen">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <div class="carrito-item-info">
+                                <h3 class="carrito-item-nombre">{{ item.repuesto.nombre }}</h3>
+                                <div class="carrito-item-detalles">
+                                    <div>Marca: {{ item.repuesto.marca }}</div>
+                                    <div>Modelo: {{ item.repuesto.modelo_auto }}</div>
+                                    <div>Categoría: {{ item.repuesto.categoria }}</div>
+                                </div>
+                                <div class="carrito-item-precio">${{ item.repuesto.precio }}</div>
+                            </div>
+                            <div class="carrito-item-cantidad">
+                                <button class="btn-cantidad" onclick="actualizarCantidad({{ item.id }}, 'decrementar')">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" class="cantidad-input" value="{{ item.cantidad }}" 
+                                       min="1" max="{{ item.repuesto.stock }}" 
+                                       onchange="actualizarCantidad({{ item.id }}, 'cambiar', this.value)">
+                                <button class="btn-cantidad" onclick="actualizarCantidad({{ item.id }}, 'incrementar')">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <button class="btn-eliminar" onclick="eliminarItem({{ item.id }})">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Resumen del Carrito -->
+            <div class="col-lg-4">
+                <div class="carrito-resumen">
+                    <h3>Resumen de la Compra</h3>
+                    <div class="resumen-item">
+                        <span>Subtotal</span>
+                        <span>${{ subtotal|floatformat:2 }}</span>
+                    </div>
+                    <div class="resumen-item">
+                        <span>IVA (19%)</span>
+                        <span>${{ iva|floatformat:2 }}</span>
+                    </div>
+                    <div class="resumen-total">
+                        <span>Total</span>
+                        <span class="total-valor">${{ total|floatformat:2 }}</span>
+                    </div>
+                    <button class="btn btn-comprar" onclick="procederCompra()">
+                        <i class="fas fa-shopping-cart me-2"></i>Proceder con la Compra
+                    </button>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="carrito-vacio">
+            <i class="fas fa-shopping-cart"></i>
+            <h3>Tu carrito está vacío</h3>
+            <p>Agrega algunos repuestos a tu carrito para comenzar tu compra.</p>
+            <a href="{% url 'repuestos:catalogo' %}" class="btn btn-primary">
+                <i class="fas fa-search me-2"></i>Ver Catálogo
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Función para formatear a dos decimales
+function formatoMoneda(valor) {
+    return parseFloat(valor).toFixed(2);
+}
+
+// Obtener la URL base para actualizar cantidad
+const actualizarCantidadUrl = "{% url 'repuestos:actualizar_cantidad' 0 %}".replace('0/', '');
+
+function actualizarCantidad(itemId, accion, nuevaCantidad = null) {
+    let cantidad;
+    const input = document.querySelector(`#item-${itemId} .cantidad-input`);
+    const btns = document.querySelectorAll(`#item-${itemId} .btn-cantidad, #item-${itemId} .btn-eliminar`);
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+    if (accion === 'cambiar') {
+        cantidad = parseInt(nuevaCantidad);
+    } else {
+        cantidad = parseInt(input.value);
+        if (accion === 'incrementar') cantidad++;
+        if (accion === 'decrementar') cantidad--;
+    }
+
+    // Validar límites en frontend
+    const maxStock = parseInt(input.max);
+    if (isNaN(cantidad) || cantidad < 1) cantidad = 1;
+    if (cantidad > maxStock) cantidad = maxStock;
+
+    input.value = cantidad;
+
+    // Deshabilitar botones mientras se procesa
+    btns.forEach(btn => btn.disabled = true);
+
+    // Crear FormData para enviar los datos
+    const formData = new FormData();
+    formData.append('cantidad', cantidad);
+    formData.append('csrfmiddlewaretoken', csrfToken);
+
+    // Actualizar en el servidor
+    fetch(actualizarCantidadUrl + itemId, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.status === 403) {
+            window.location.href = '{% url 'usuarios:login' %}';
+            return;
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (!data) return;
+        if (data.status === 'success') {
+            input.value = cantidad;
+            actualizarResumen(data);
+            mostrarMensaje('Cantidad actualizada correctamente.', 'success');
+        } else {
+            mostrarMensaje(data.message, 'danger');
+            // Si el backend corrige la cantidad, actualiza el input
+            if (data.cantidad) input.value = data.cantidad;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        mostrarMensaje('Error al actualizar la cantidad', 'danger');
+    })
+    .finally(() => {
+        btns.forEach(btn => btn.disabled = false);
+    });
+}
+
+// Obtener la URL base para eliminar item
+const eliminarItemUrl = "{% url 'repuestos:eliminar_del_carrito' 0 %}".replace('0/', '');
+
+function eliminarItem(itemId) {
+    if (!confirm('¿Estás seguro de que deseas eliminar este item del carrito?')) return;
+
+    const btns = document.querySelectorAll(`#item-${itemId} .btn-cantidad, #item-${itemId} .btn-eliminar`);
+    btns.forEach(btn => btn.disabled = true);
+
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const formData = new FormData();
+    formData.append('csrfmiddlewaretoken', csrfToken);
+
+    fetch(eliminarItemUrl + itemId, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.status === 403) {
+            window.location.href = '{% url 'usuarios:login' %}';
+            return;
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (!data) return;
+        if (data.status === 'success') {
+            document.querySelector(`#item-${itemId}`).remove();
+            actualizarResumen(data);
+            mostrarMensaje('Item eliminado correctamente.', 'success');
+            if (data.items_count === 0) {
+                window.location.reload();
+            }
+        } else {
+            mostrarMensaje(data.message, 'danger');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        mostrarMensaje('Error al eliminar el item', 'danger');
+    });
+}
+
+function actualizarResumen(data) {
+    document.querySelector('.resumen-item:nth-child(1) span:last-child').textContent = `$${formatoMoneda(data.subtotal)}`;
+    document.querySelector('.resumen-item:nth-child(2) span:last-child').textContent = `$${formatoMoneda(data.iva)}`;
+    document.querySelector('.resumen-total .total-valor').textContent = `$${formatoMoneda(data.total)}`;
+}
+
+function mostrarMensaje(mensaje, tipo) {
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${tipo} alert-dismissible fade show mt-3`;
+    alert.innerHTML = `
+        <i class="fas fa-info-circle me-2"></i>${mensaje}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.querySelector('main').insertBefore(alert, document.querySelector('main').firstChild);
+    setTimeout(() => {
+        if (alert.parentNode) alert.parentNode.removeChild(alert);
+    }, 3500);
+}
+
+function procederCompra() {
+    // Aquí iría la lógica para proceder con la compra
+    alert('Funcionalidad de compra en desarrollo');
+}
+</script>
+{% endblock %} 

@@ -61,23 +61,23 @@
             font-weight: 800;
             color: #ffffff !important;
             margin-bottom: 2rem;
-            text-shadow: 0 0 5px var(--neon-cyan),
-                        0 0 10px var(--neon-cyan);
+            text-shadow: 0 0 3px rgba(0, 255, 255, 0.5),
+                        0 0 5px rgba(0, 255, 255, 0.3);
             animation: glow 1.5s ease-in-out infinite alternate;
             letter-spacing: 2px;
             padding: 20px 40px;
-            border: 2px solid var(--neon-green);
+            border: 2px solid rgba(57, 255, 20, 0.7);
             border-radius: 15px;
-            box-shadow: 0 0 5px var(--neon-green),
-                       inset 0 0 5px var(--neon-green);
+            box-shadow: 0 0 3px rgba(57, 255, 20, 0.5),
+                       inset 0 0 3px rgba(57, 255, 20, 0.5);
             display: inline-block;
             background: rgba(26, 26, 26, 0.8);
         }
 
         .hero-subtitle {
             font-size: 2rem;
-            color: var(--neon-cyan) !important;
-            text-shadow: 0 0 10px var(--neon-cyan);
+            color: rgba(0, 255, 255, 0.8) !important;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
             animation: fadeInUp 0.8s ease-out;
             margin-bottom: 3rem;
             letter-spacing: 1px;
@@ -204,18 +204,12 @@
         /* Animations */
         @keyframes glow {
             from {
-                text-shadow: 0 0 2px #fff,
-                            0 0 4px var(--neon-cyan),
-                            0 0 6px var(--neon-cyan);
-                box-shadow: 0 0 2px var(--neon-green),
-                           inset 0 0 2px var(--neon-green);
+                text-shadow: 0 0 3px rgba(0, 255, 255, 0.5),
+                            0 0 5px rgba(0, 255, 255, 0.3);
             }
             to {
-                text-shadow: 0 0 4px #fff,
-                            0 0 8px var(--neon-cyan),
-                            0 0 12px var(--neon-cyan);
-                box-shadow: 0 0 5px var(--neon-green),
-                           inset 0 0 5px var(--neon-green);
+                text-shadow: 0 0 4px rgba(0, 255, 255, 0.6),
+                            0 0 6px rgba(0, 255, 255, 0.4);
             }
         }
 
@@ -287,6 +281,11 @@
                         <a class="nav-link" href="{% url 'portafolio' %}">Portafolio</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'chat' %}">
+                            <i class="fas fa-comments"></i> Chat
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'contacto' %}">Contacto</a>
                     </li>
                 </ul>
@@ -303,7 +302,7 @@
             <hr class="my-4">
             <div class="row">
                 <div class="col-12 text-center">
-                    <p class="mb-0">&copy; 2025 MoWebCri | Desarrollo Web Profesional</p>
+                    <p class="mb-0" style="color: #0066cc;">&copy; 2025 MoWebCri | Desarrollo Web Profesional</p>
                 </div>
             </div>
         </div>

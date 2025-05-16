@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Historial de Actividades</h3>
+                </div>
+                <div class="card-body">
+                    {% if actividades %}
+                        <div class="list-group">
+                            {% for actividad in actividades %}
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">{{ actividad.get_tipo_display }}</h5>
+                                        <small>{{ actividad.fecha|timesince }}</small>
+                                    </div>
+                                    <p class="mb-1">{{ actividad.descripcion }}</p>
+                                    {% if actividad.ip_address %}
+                                        <small class="text-muted">IP: {{ actividad.ip_address }}</small>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-center">No hay actividades registradas.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

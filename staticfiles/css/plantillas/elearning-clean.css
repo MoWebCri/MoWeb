@@ -1,0 +1,390 @@
+/* Regla de prueba global */
+* {
+    border: 3px solid purple !important;
+    background: yellow !important;
+    color: red !important;
+}
+
+/* Fondo global celeste degradado */
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #2bd7e4, #75e0f5) !important;
+    color: #fff;
+    font-family: 'Calibre', 'Inter', 'San Francisco', 'SF Pro Text', -apple-system, system-ui, sans-serif;
+}
+
+/* Ajustes generales para containers y filas */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+[class^="col-"] {
+    padding-left: 15px;
+    padding-right: 15px;
+    box-sizing: border-box;
+}
+
+/* Hero Section Moderno */
+.hero, section.hero {
+    background: transparent !important;
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 6rem 0 4rem 0;
+    color: #fff !important;
+}
+.hero-content {
+    background: rgba(0,0,0,0.10);
+    border-radius: 24px;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 8px 32px rgba(43, 215, 228, 0.18);
+    backdrop-filter: blur(6px);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.hero-image {
+    max-width: 150% !important;
+    height: auto !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin: -50px auto !important;
+    display: block !important;
+    opacity: 0.7 !important;
+    transform: scale(1.5) !important;
+    filter: none !important;
+    position: relative !important;
+    z-index: 1 !important;
+    border: 5px solid red !important;
+}
+.hero-image:hover {
+    opacity: 1;
+    transform: scale(1.25);
+    filter: drop-shadow(0 0 20px rgba(43, 215, 228, 0.7));
+}
+.hero-title {
+    color: #fff !important;
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+    text-shadow: 0 0 12px #2bd7e4, 2px 2px 12px rgba(0,0,0,0.18);
+}
+.hero-description {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    color: #003366 !important;
+}
+
+/* Cursos Section */
+.courses {
+    padding: 5rem 0 3rem 0;
+}
+.course-card {
+    border: 4px solid lime !important;
+    background: orange !important;
+    color: blue !important;
+    transform: scale(1.1) !important;
+    background-color: rgba(0, 0, 0, 0.85) !important;
+    border-radius: 18px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+}
+.course-image {
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+.course-content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.course-title {
+    color: #ffffff !important;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.course-content p {
+    color: #b3b3b3 !important;
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+}
+.course-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+.course-info span {
+    color: #cccccc !important;
+}
+.course-duration, .course-price {
+    font-weight: 600;
+}
+.course-price {
+    color: #00ff9d;
+    font-size: 1.2rem;
+}
+
+/* Botón CTA llamativo */
+.cta-button {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(90deg, #2bd7e4 0%, #00ff9d 100%);
+    color: #222;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+    box-shadow: 0 4px 16px #2bd7e4;
+    border: none;
+}
+.cta-button:hover {
+    background: linear-gradient(90deg, #00ff9d 0%, #2bd7e4 100%);
+    color: #111;
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 8px 32px #00ff9d;
+}
+
+/* Títulos de sección modernos */
+.section-title {
+    color: #fff;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 3rem;
+    text-shadow: 0 0 8px #2bd7e4;
+    position: relative;
+}
+.section-title::after {
+    content: '';
+    display: block;
+    margin: 0.5rem auto 0;
+    width: 60px;
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #2bd7e4 0%, #00ff9d 100%);
+}
+
+/* Features Section */
+.features {
+    padding: 5rem 0 3rem 0;
+}
+.feature-card {
+    background-color: rgba(0, 0, 0, 0.85) !important;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    padding: 2rem 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #fff;
+    transition: all 0.3s;
+}
+.feature-card:hover {
+    box-shadow: 0 16px 40px #2bd7e4;
+    border-color: #2bd7e4;
+    transform: translateY(-5px) scale(1.02);
+}
+.feature-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 1.2rem;
+    background: linear-gradient(135deg, #2bd7e4 0%, #00ff9d 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 2rem;
+    box-shadow: 0 2px 8px #2bd7e4;
+}
+.feature-card h3 {
+    color: #2bd7e4 !important;
+    margin: 1rem 0 0.5rem 0;
+    font-weight: 600;
+    font-size: 1.2rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.feature-card p {
+    color: #b3b3b3 !important;
+}
+
+/* Testimonios */
+.testimonials {
+    padding: 5rem 0 3rem 0;
+}
+.testimonial-card {
+    background-color: rgba(0, 0, 0, 0.85) !important;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    padding: 2rem 1.5rem;
+    margin-bottom: 2rem;
+    color: #fff;
+    transition: all 0.3s;
+    text-align: center;
+}
+.testimonial-card:hover {
+    box-shadow: 0 16px 40px #2bd7e4;
+    border-color: #2bd7e4;
+    transform: translateY(-5px) scale(1.02);
+}
+.testimonial-text {
+    color: #b3b3b3 !important;
+    font-style: italic;
+    margin-bottom: 1.2rem;
+}
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+}
+.author-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 1rem;
+    object-fit: cover;
+    border: 2px solid #00ff9d;
+}
+.testimonial-author h4 {
+    color: #2bd7e4 !important;
+    margin: 0 0 0.2rem 0;
+    font-size: 1.1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.testimonial-author p {
+    color: #b3b3b3 !important;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+/* Responsividad */
+@media (max-width: 991px) {
+    .hero, section.hero {
+        flex-direction: column;
+        padding: 4rem 0 2rem 0;
+    }
+    .hero-content {
+        margin-bottom: 2rem;
+    }
+    .row {
+        flex-direction: column;
+    }
+}
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem 0.5rem;
+    }
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    .hero-content {
+        padding: 1.5rem 1rem;
+    }
+    .course-content {
+        padding: 1.2rem;
+    }
+    .feature-card, .testimonial-card {
+        padding: 1.2rem 0.7rem;
+    }
+}
+
+/* Ajuste de altura del navbar para que no sea tan alta */
+.navbar {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    height: 64px;
+    min-height: 64px;
+    line-height: 64px;
+}
+
+/* Mejor contraste de letras en el navbar */
+.navbar .nav-link, .navbar .navbar-brand {
+    color: #3a1c71 !important;
+    text-shadow: 0 1px 8px #fff, 0 0 2px #2bd7e4;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.navbar .nav-link:hover, .navbar .nav-link.active {
+    color: #00ff9d !important;
+    text-shadow: 0 0 8px #00ff9d, 0 0 2px #000;
+}
+
+/* Título principal en blanco */
+.hero-title {
+    color: #fff !important;
+}
+
+/* Títulos en morado oscuro */
+.section-title,
+.course-title,
+.feature-card h3,
+.testimonial-author h4 {
+    color: #3a1c71 !important;
+}
+
+/* Subtítulos y descripciones en azul */
+.course-content p,
+.feature-card p,
+.testimonial-text,
+.testimonial-author p {
+    color: #0099ff !important;
+}
+
+/* Eliminar reglas anteriores de color azul y dejar solo azul marino en los textos específicos */
+.hero-description,
+.course-content p,
+.course-info,
+.feature-card p,
+.testimonial-text,
+footer,
+.footer {
+    color: #003366 !important;
+}
+
+/* Ajustamos el contenedor para que no corte la imagen */
+.col-lg-6 {
+    overflow: visible !important;
+    position: relative !important;
+    z-index: 1 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+} 

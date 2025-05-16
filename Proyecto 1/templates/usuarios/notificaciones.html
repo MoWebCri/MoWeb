@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Notificaciones</h3>
+                </div>
+                <div class="card-body">
+                    {% if notificaciones %}
+                        <div class="list-group">
+                            {% for notificacion in notificaciones %}
+                                <div class="list-group-item list-group-item-action {% if not notificacion.leida %}list-group-item-primary{% endif %}" 
+                                     id="notificacion-{{ notificacion.id }}">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">{{ notificacion.titulo }}</h5>
+                                        <small>{{ notificacion.fecha_creacion|timesince }}</small>
+                                    </div>
+                                    <p class="mb-1">{{ notificacion.mensaje }}</p>
+                                    <small class="text-muted">Tipo: {{ notificacion.get_tipo_display }}</small>
+                                    {% if not notificacion.leida %}
+                                        <button class="btn btn-sm btn-outline-primary float-end marcar-leida" 
+                                                data-notificacion-id="{{ notificacion.id }}">
+                                            Marcar como leída
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-center">No tienes notificaciones.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const botonesMarcarLeida = document.querySelectorAll('.marcar-leida');
+    
+    botonesMarcarLeida.forEach(boton => {
+        boton.addEventListener('click', function() {
+            const notificacionId = this.dataset.notificacionId;
+            fetch(`/usuarios/notificaciones/${notificacionId}/marcar-leida/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const notificacion = document.getElementById(`notificacion-${notificacionId}`);
+                    notificacion.classList.remove('list-group-item-primary');
+                    this.remove();
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %}
+{% endblock %} 

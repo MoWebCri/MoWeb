@@ -1,0 +1,68 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    {% if user.perfilusuario.avatar %}
+                        <img src="{{ user.perfilusuario.avatar.url }}" class="rounded-circle img-fluid mb-3" style="max-width: 150px;">
+                    {% else %}
+                        <img src="https://via.placeholder.com/150" class="rounded-circle img-fluid mb-3">
+                    {% endif %}
+                    <h4>{{ user.get_full_name }}</h4>
+                    <p class="text-muted">{{ user.perfilusuario.get_rol_display }}</p>
+                </div>
+            </div>
+            
+            <!-- Sección de Seguridad -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Seguridad</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Autenticación de dos factores</span>
+                        {% if user.totpdevice_set.exists %}
+                            <span class="badge bg-success">Activada</span>
+                        {% else %}
+                            <span class="badge bg-danger">Desactivada</span>
+                        {% endif %}
+                    </div>
+                    {% if user.totpdevice_set.exists %}
+                        <a href="{% url 'usuarios:desactivar_2fa' %}" class="btn btn-danger btn-sm w-100">Desactivar 2FA</a>
+                    {% else %}
+                        <a href="{% url 'usuarios:configurar_2fa' %}" class="btn btn-primary btn-sm w-100">Activar 2FA</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Editar Perfil</h3>
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Información Personal</h5>
+                                {{ user_form|crispy }}
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Información Adicional</h5>
+                                {{ perfil_form|crispy }}
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

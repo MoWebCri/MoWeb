@@ -1,0 +1,83 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}" style="height: 300px; object-fit: cover;">
+                {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 300px;">
+                        <i class="fas fa-image fa-5x text-muted"></i>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <h3 class="card-title">{{ producto.nombre }}</h3>
+                    <p class="card-text">
+                        <strong>Código:</strong> {{ producto.codigo }}<br>
+                        <strong>Marca:</strong> {{ producto.marca }}<br>
+                        <strong>Categoría:</strong> {{ producto.categoria }}<br>
+                        <strong>Ubicación:</strong> {{ producto.ubicacion|default:"No especificada" }}<br>
+                        <strong>Stock Actual:</strong> {{ producto.stock }}<br>
+                        <strong>Stock Mínimo:</strong> {{ producto.stock_minimo }}<br>
+                        <strong>Precio de Compra:</strong> ${{ producto.precio_compra }}<br>
+                        <strong>Precio de Venta:</strong> ${{ producto.precio_venta }}
+                    </p>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'editar_producto' producto.pk %}" class="btn btn-warning">
+                            <i class="fas fa-edit"></i> Editar Producto
+                        </a>
+                        <a href="{% url 'registrar_movimiento' producto.pk %}" class="btn btn-success">
+                            <i class="fas fa-exchange-alt"></i> Registrar Movimiento
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Historial de Movimientos</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Tipo</th>
+                                    <th>Cantidad</th>
+                                    <th>Usuario</th>
+                                    <th>Observación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for movimiento in movimientos %}
+                                <tr>
+                                    <td>{{ movimiento.fecha|date:"d/m/Y H:i" }}</td>
+                                    <td>
+                                        {% if movimiento.tipo == 'entrada' %}
+                                            <span class="badge bg-success">Entrada</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Salida</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ movimiento.cantidad }}</td>
+                                    <td>{{ movimiento.usuario.username }}</td>
+                                    <td>{{ movimiento.observacion|default:"-" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No hay movimientos registrados</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

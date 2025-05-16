@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ curso.titulo }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h1 class="mb-4">{{ curso.titulo }}</h1>
+            {% if curso.imagen %}
+            <img src="{{ curso.imagen.url }}" class="img-fluid rounded mb-4" alt="{{ curso.titulo }}">
+            {% endif %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Descripción</h5>
+                    <p class="card-text">{{ curso.descripcion }}</p>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Contenido del Curso</h5>
+                    <p class="card-text">{{ curso.contenido }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Información del Curso</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-tag me-2"></i>
+                            <strong>Categoría:</strong> {{ curso.categoria }}
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-clock me-2"></i>
+                            <strong>Duración:</strong> {{ curso.duracion }} horas
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-dollar-sign me-2"></i>
+                            <strong>Precio:</strong> ${{ curso.precio }}
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-calendar me-2"></i>
+                            <strong>Fecha de inicio:</strong> {{ curso.fecha_inicio|date:"d/m/Y" }}
+                        </li>
+                    </ul>
+                    {% if user.is_authenticated %}
+                        {% if comprado %}
+                            <a href="{{ curso.enlace_moodle }}" class="btn btn-primary w-100 mb-2" target="_blank">
+                                <i class="fas fa-graduation-cap"></i> Acceder al curso
+                            </a>
+                        {% elif en_carrito %}
+                            <div class="alert alert-info mb-3">
+                                <i class="fas fa-info-circle"></i> Este curso ya está en tu carrito
+                            </div>
+                            <a href="{% url 'cursos:ver_carrito' %}" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-shopping-cart"></i> Ver carrito
+                            </a>
+                        {% else %}
+                            <a href="{% url 'cursos:agregar_al_carrito' curso.id %}" class="btn btn-success w-100">
+                                <i class="fas fa-cart-plus"></i> Inscribirse
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        <div class="alert alert-warning mb-3">
+                            <i class="fas fa-exclamation-triangle"></i> Debes iniciar sesión para inscribirte en este curso
+                        </div>
+                        <a href="{% url 'usuarios:login' %}?next={{ request.path }}" class="btn btn-primary w-100">
+                            <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

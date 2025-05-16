@@ -1,0 +1,450 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Catálogo de Repuestos - AutoX{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilo para el fondo oscuro (degradado negro a gris oscuro) */
+    body {
+        background: linear-gradient(to bottom, #1a1a1a, #2d2d2d);
+    }
+    /* Estilo para el contenedor de repuestos (por ejemplo, .repuesto-card) */
+    .repuesto-card {
+        background: rgba(0, 0, 0, 0.6); /* Fondo negro semitransparente */
+        border-radius: var(--border-radius-lg);
+         box-shadow: var(--shadow-sm);
+         padding: 1.5rem;
+         margin-bottom: 1.5rem;
+         color: #fff; /* Texto en blanco para contraste */
+    }
+    .catalogo-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: var(--text-light);
+        padding: 3rem 0;
+        margin-bottom: 3rem;
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .catalogo-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .catalogo-header p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .filtros-sidebar {
+        background: var(--bg-primary);
+        border-radius: var(--border-radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+        position: sticky;
+        top: 2rem;
+    }
+
+    .filtros-sidebar h5 {
+        color: var(--text-primary);
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .filtro-grupo {
+        margin-bottom: 1.5rem;
+    }
+
+    .filtro-grupo label {
+        color: var(--text-secondary);
+        font-weight: 500;
+        margin-bottom: 0.75rem;
+        display: block;
+    }
+
+    .filtro-grupo select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-md);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        transition: var(--transition-fast);
+    }
+
+    .filtro-grupo select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .btn-filtrar {
+        width: 100%;
+        padding: 0.75rem;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: var(--border-radius-md);
+        font-weight: 500;
+        transition: var(--transition-normal);
+    }
+
+    .btn-filtrar:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .repuesto-imagen {
+        height: 200px;
+        background: var(--bg-secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+    }
+
+    .repuesto-imagen img {
+        max-height: 100%;
+        max-width: 100%;
+        object-fit: contain;
+    }
+
+    .repuesto-info {
+        padding: 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .repuesto-categoria {
+        color: var(--accent-color);
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.5rem;
+    }
+
+    .repuesto-nombre {
+        color: var(--text-primary);
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        line-height: 1.4;
+    }
+
+    .repuesto-detalles {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+    }
+
+    .repuesto-detalle {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+
+    .repuesto-precio {
+        color: var(--success-color);
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 1rem 0;
+    }
+
+    .repuesto-stock {
+        color: var(--danger-color);
+        font-weight: 500;
+        margin-bottom: 1rem;
+    }
+
+    .repuesto-stock.disponible {
+        color: var(--success-color);
+    }
+
+    .btn-agregar {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 0.75rem;
+        border-radius: var(--border-radius-md);
+        font-weight: 500;
+        transition: var(--transition-normal);
+        width: 100%;
+        margin-top: auto;
+    }
+
+    .btn-agregar:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .btn-agregar:disabled {
+        background: var(--secondary-color);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .no-resultados {
+        text-align: center;
+        padding: 3rem;
+        background: var(--bg-primary);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .no-resultados i {
+        font-size: 3rem;
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+    }
+
+    .no-resultados h3 {
+        color: var(--text-primary);
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .no-resultados p {
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+    }
+
+    .paginacion {
+        margin-top: 3rem;
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .paginacion .page-link {
+        padding: 0.75rem 1rem;
+        border: none;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        border-radius: var(--border-radius-md);
+        transition: var(--transition-fast);
+    }
+
+    .paginacion .page-link:hover {
+        background: var(--bg-secondary);
+        color: var(--primary-color);
+    }
+
+    .paginacion .page-item.active .page-link {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    .paginacion .page-item.disabled .page-link {
+        background: var(--bg-secondary);
+        color: var(--text-secondary);
+    }
+
+    @media (max-width: 768px) {
+        .catalogo-header {
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .catalogo-header h1 {
+            font-size: 2rem;
+        }
+
+        .filtros-sidebar {
+            position: static;
+            margin-bottom: 2rem;
+        }
+
+        .repuesto-card {
+            margin-bottom: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="catalogo-header text-center">
+    <div class="container">
+        <h1>Catálogo de Repuestos</h1>
+        <p>Encuentra los repuestos que necesitas para tu vehículo. Tenemos una amplia selección de marcas y modelos.</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <!-- Filtros -->
+        <div class="col-lg-3">
+            <div class="filtros-sidebar">
+                <h5>Filtros</h5>
+                <form method="get" id="filtros-form">
+                    <div class="filtro-grupo">
+                        <label for="marca">Marca del Auto</label>
+                        <select name="marca" id="marca" class="form-select">
+                            <option value="">Todas las marcas</option>
+                            <option value="Toyota" {% if request.GET.marca == 'Toyota' %}selected{% endif %}>Toyota</option>
+                            <option value="Honda" {% if request.GET.marca == 'Honda' %}selected{% endif %}>Honda</option>
+                            <option value="Ford" {% if request.GET.marca == 'Ford' %}selected{% endif %}>Ford</option>
+                            <option value="Chevrolet" {% if request.GET.marca == 'Chevrolet' %}selected{% endif %}>Chevrolet</option>
+                            <option value="Volkswagen" {% if request.GET.marca == 'Volkswagen' %}selected{% endif %}>Volkswagen</option>
+                        </select>
+                    </div>
+
+                    <div class="filtro-grupo">
+                        <label for="modelo">Modelo del Auto</label>
+                        <select name="modelo" id="modelo" class="form-select">
+                            <option value="">Todos los modelos</option>
+                            <option value="Corolla" {% if request.GET.modelo == 'Corolla' %}selected{% endif %}>Corolla</option>
+                            <option value="Civic" {% if request.GET.modelo == 'Civic' %}selected{% endif %}>Civic</option>
+                            <option value="Focus" {% if request.GET.modelo == 'Focus' %}selected{% endif %}>Focus</option>
+                            <option value="Cruze" {% if request.GET.modelo == 'Cruze' %}selected{% endif %}>Cruze</option>
+                            <option value="Golf" {% if request.GET.modelo == 'Golf' %}selected{% endif %}>Golf</option>
+                        </select>
+                    </div>
+
+                    <div class="filtro-grupo">
+                        <label for="categoria">Categoría</label>
+                        <select name="categoria" id="categoria" class="form-select">
+                            <option value="">Todas las categorías</option>
+                            <option value="Filtros" {% if request.GET.categoria == 'Filtros' %}selected{% endif %}>Filtros</option>
+                            <option value="Frenos" {% if request.GET.categoria == 'Frenos' %}selected{% endif %}>Frenos</option>
+                            <option value="Motor" {% if request.GET.categoria == 'Motor' %}selected{% endif %}>Motor</option>
+                            <option value="Suspensión" {% if request.GET.categoria == 'Suspensión' %}selected{% endif %}>Suspensión</option>
+                        </select>
+                    </div>
+
+                    <div class="filtro-grupo">
+                        <label for="orden">Ordenar por</label>
+                        <select name="orden" id="orden" class="form-select">
+                            <option value="nombre" {% if request.GET.orden == 'nombre' %}selected{% endif %}>Nombre</option>
+                            <option value="precio_asc" {% if request.GET.orden == 'precio_asc' %}selected{% endif %}>Precio: Menor a Mayor</option>
+                            <option value="precio_desc" {% if request.GET.orden == 'precio_desc' %}selected{% endif %}>Precio: Mayor a Menor</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-filtrar">
+                        <i class="fas fa-filter me-2"></i>Filtrar
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Lista de Repuestos -->
+        <div class="col-lg-9">
+            {% if repuestos %}
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    {% for repuesto in repuestos %}
+                        <div class="col">
+                            <div class="repuesto-card">
+                                <div class="repuesto-imagen">
+                                    <i class="fas fa-tools fa-4x text-secondary"></i>
+                                </div>
+                                <div class="repuesto-info">
+                                    <div class="repuesto-categoria">{{ repuesto.categoria }}</div>
+                                    <h3 class="repuesto-nombre">{{ repuesto.nombre }}</h3>
+                                    <div class="repuesto-detalles">
+                                        <div class="repuesto-detalle">
+                                            <span>Marca:</span>
+                                            <span>{{ repuesto.marca }}</span>
+                                        </div>
+                                        <div class="repuesto-detalle">
+                                            <span>Modelo:</span>
+                                            <span>{{ repuesto.modelo_auto }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="repuesto-precio">${{ repuesto.precio }}</div>
+                                    <div class="repuesto-stock {% if repuesto.stock > 0 %}disponible{% endif %}">
+                                        {% if repuesto.stock > 0 %}
+                                            <i class="fas fa-check-circle me-1"></i>Disponible
+                                        {% else %}
+                                            <i class="fas fa-times-circle me-1"></i>Sin stock
+                                        {% endif %}
+                                    </div>
+                                    <a href="{% url 'repuestos:detalle_repuesto' repuesto.id %}" 
+                                       class="btn btn-agregar {% if repuesto.stock == 0 %}disabled{% endif %}">
+                                        <i class="fas fa-eye me-2"></i>
+                                        {% if repuesto.stock > 0 %}
+                                            Ver Detalle
+                                        {% else %}
+                                            Sin Stock
+                                        {% endif %}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Paginación -->
+                {% if repuestos.has_other_pages %}
+                    <nav class="paginacion">
+                        <ul class="pagination">
+                            {% if repuestos.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ repuestos.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                </li>
+                            {% endif %}
+
+                            {% for i in repuestos.paginator.page_range %}
+                                {% if repuestos.number == i %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ i }}</span>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ i }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ i }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if repuestos.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ repuestos.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            {% else %}
+                <div class="no-resultados">
+                    <i class="fas fa-search"></i>
+                    <h3>No se encontraron repuestos</h3>
+                    <p>No hay repuestos que coincidan con los filtros seleccionados.</p>
+                    <a href="{% url 'repuestos:catalogo' %}" class="btn btn-primary">
+                        <i class="fas fa-redo me-2"></i>Limpiar Filtros
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Eliminar la función agregarAlCarrito ya que no se usará más
+</script>
+{% endblock %} 

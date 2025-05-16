@@ -1,0 +1,54 @@
+{% extends 'base/base.html' %}
+
+{% block title %}AutoX - Inicio{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <div class="p-5 text-center bg-light rounded">
+                <h1 class="display-4">Bienvenido a AutoX</h1>
+                <p class="lead">Tu tienda de repuestos automotrices de confianza</p>
+                <a href="{% url 'repuestos:catalogo' %}" class="btn btn-primary btn-lg">Ver Catálogo</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Categorías -->
+    <h2 class="mb-4">Categorías</h2>
+    <div class="row mb-5">
+        {% for categoria in categorias %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ categoria.nombre }}</h5>
+                    <p class="card-text">{{ categoria.descripcion }}</p>
+                    <a href="{% url 'repuestos:catalogo' %}?categoria={{ categoria.id }}" class="btn btn-outline-primary">Ver Repuestos</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Repuestos Destacados -->
+    <h2 class="mb-4">Repuestos Destacados</h2>
+    <div class="row">
+        {% for repuesto in repuestos_destacados %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                {% if repuesto.imagen %}
+                <img src="{{ repuesto.imagen.url }}" class="card-img-top" alt="{{ repuesto.nombre }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ repuesto.nombre }}</h5>
+                    <p class="card-text">{{ repuesto.descripcion|truncatewords:20 }}</p>
+                    <p class="card-text"><strong>Precio: ${{ repuesto.precio }}</strong></p>
+                    <a href="{% url 'repuestos:detalle_repuesto' repuesto.id %}" class="btn btn-primary">Ver Detalles</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

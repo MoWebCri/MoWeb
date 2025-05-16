@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Configurar Autenticación de Dos Factores</h3>
+                </div>
+                <div class="card-body">
+                    {% if not device.confirmed %}
+                        <div class="alert alert-info">
+                            <h4 class="alert-heading">Instrucciones:</h4>
+                            <ol>
+                                <li>Descarga una aplicación de autenticación como Google Authenticator o Authy</li>
+                                <li>Escanea el código QR que aparece a continuación</li>
+                                <li>Ingresa el código de 6 dígitos que aparece en la aplicación</li>
+                            </ol>
+                        </div>
+                        
+                        {% if qr_code %}
+                            <div class="text-center mb-4">
+                                <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code" class="img-fluid">
+                            </div>
+                        {% endif %}
+                        
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="token">Código de verificación:</label>
+                                <input type="text" class="form-control" id="token" name="token" required>
+                            </div>
+                            <div class="mt-3">
+                                <button type="submit" name="confirmar" class="btn btn-primary">Confirmar</button>
+                                <a href="{% url 'usuarios:perfil' %}" class="btn btn-secondary">Cancelar</a>
+                            </div>
+                        </form>
+                    {% else %}
+                        <div class="alert alert-success">
+                            <h4 class="alert-heading">¡2FA ya está configurado!</h4>
+                            <p>La autenticación de dos factores ya está activa en tu cuenta.</p>
+                        </div>
+                        <div class="mt-3">
+                            <a href="{% url 'usuarios:perfil' %}" class="btn btn-primary">Volver al perfil</a>
+                            <a href="{% url 'usuarios:desactivar_2fa' %}" class="btn btn-danger">Desactivar 2FA</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -265,6 +265,31 @@
             });
         });
     </script>
-    {% block extra_js %}{% endblock %}
+    <!-- Botón flotante de WhatsApp -->
+    <a href="https://wa.me/56944020230" class="whatsapp-float" target="_blank" title="Chatea con nosotros por WhatsApp">
+        <img src="{% static 'img/wsp.png' %}" alt="WhatsApp" width="60" height="60">
+    </a>
+    <style>
+    .whatsapp-float {
+        position: fixed;
+        width: 60px;
+        height: 60px;
+        bottom: 25px;
+        right: 25px;
+        z-index: 999;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        border-radius: 50%;
+        transition: box-shadow 0.2s;
+    }
+    .whatsapp-float:hover {
+        box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
+    .whatsapp-float img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
+    </style>
 </body>
 </html> 

@@ -5,104 +5,213 @@
 
 {% block extra_css %}
 <style>
-    .chat-section {
-        background-color: var(--primary-dark);
-        min-height: calc(100vh - 76px);
+    :root {
+        --neon-cyan: rgba(0, 255, 255, 0.8);
+        --neon-purple: #f0f;
+        --neon-green: #0f0;
+        --dark-bg: rgba(18, 18, 18, 0.95);
+        --darker-bg: rgba(10, 10, 10, 0.97);
+        --glow-shadow: 0 0 5px var(--neon-cyan),
+                      0 0 10px var(--neon-cyan),
+                      0 0 15px var(--neon-cyan);
     }
+
+    .chat-section {
+        background-color: var(--dark-bg);
+        min-height: calc(100vh - 76px);
+        padding-top: 100px;
+    }
+
+    .section-title {
+        color: rgba(0, 255, 255, 0.7);
+        text-shadow: 0 0 5px rgba(0, 255, 255, 0.5),
+                    0 0 10px rgba(0, 255, 255, 0.3);
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .lead {
+        color: var(--neon-purple);
+        text-shadow: 0 0 10px var(--neon-purple);
+    }
+
     .chat-container {
         height: 500px;
-        border-radius: 10px;
+        border-radius: 15px;
         overflow: hidden;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        background-color: #2a2a2a;
+        box-shadow: 0 0 15px var(--neon-cyan),
+                   inset 0 0 15px var(--neon-cyan);
+        background-color: var(--darker-bg);
+        border: 1px solid var(--neon-cyan);
+        backdrop-filter: blur(10px);
     }
+
     .chat-header {
-        background: var(--primary-color);
-        color: white;
+        background: linear-gradient(45deg, var(--dark-bg), rgba(0, 255, 255, 0.05));
+        color: rgba(0, 255, 255, 0.7);
         padding: 15px;
         display: flex;
         align-items: center;
+        border-bottom: 1px solid rgba(0, 255, 255, 0.3);
     }
+
     .chat-header i {
         margin-right: 10px;
         font-size: 1.5rem;
+        text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
     }
+
+    .chat-header h3 {
+        text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+    }
+
     .chat-messages {
         height: 350px;
         overflow-y: auto;
         padding: 15px;
-        background-color: #2a2a2a;
+        background-color: var(--dark-bg);
     }
+
     .message {
         margin-bottom: 15px;
         max-width: 80%;
+        animation: messageAppear 0.3s ease-out;
     }
+
+    @keyframes messageAppear {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
     .message-user {
         margin-left: auto;
-        background: var(--accent-color);
-        color: white;
+        background: linear-gradient(45deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
+        color: #fff;
         border-radius: 15px 15px 0 15px;
         padding: 10px 15px;
+        border: 1px solid var(--neon-cyan);
+        box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
     }
+
     .message-bot {
-        background: #333333;
-        color: white;
+        background: linear-gradient(45deg, rgba(0, 255, 0, 0.1), rgba(0, 255, 255, 0.1));
+        color: #fff;
         border-radius: 15px 15px 15px 0;
         padding: 10px 15px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--neon-green);
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
     }
+
     .chat-input {
         padding: 15px;
-        background: #2a2a2a;
-        border-top: 1px solid #333;
+        background: var(--darker-bg);
+        border-top: 1px solid var(--neon-cyan);
     }
+
+    .chat-input .form-control {
+        background-color: rgba(30, 30, 30, 0.7);
+        border: 1px solid var(--neon-cyan);
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+
+    .chat-input .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .chat-input .form-control:focus {
+        background-color: rgba(40, 40, 40, 0.8);
+        border-color: var(--neon-purple);
+        color: #fff;
+        box-shadow: 0 0 10px var(--neon-cyan);
+    }
+
+    .chat-input .btn {
+        background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        transition: all 0.3s ease;
+    }
+
+    .chat-input .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 15px var(--neon-cyan);
+    }
+
     .typing-indicator {
         display: none;
         margin-bottom: 15px;
-        background: #333333;
+        background: rgba(30, 30, 30, 0.7);
         border-radius: 15px 15px 15px 0;
         padding: 10px 15px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--neon-green);
     }
+
     .typing-indicator span {
         display: inline-block;
         width: 8px;
         height: 8px;
-        background: #666;
+        background: var(--neon-green);
         border-radius: 50%;
         margin-right: 5px;
+        box-shadow: 0 0 5px var(--neon-green);
         animation: typing 1s infinite;
     }
-    .typing-indicator span:nth-child(2) {
-        animation-delay: 0.2s;
-    }
-    .typing-indicator span:nth-child(3) {
-        animation-delay: 0.4s;
-    }
+
     @keyframes typing {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-5px); }
+        0%, 100% { 
+            transform: translateY(0);
+            opacity: 0.5;
+        }
+        50% { 
+            transform: translateY(-5px);
+            opacity: 1;
+        }
     }
 
-    /* Estilo para el input del chat */
-    .chat-input .form-control {
-        background-color: #333333;
-        border: 1px solid #444;
-        color: white;
+    /* Botones de contacto */
+    .contact-buttons .btn {
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
     }
-    .chat-input .form-control::placeholder {
-        color: #888;
+
+    .btn-whatsapp {
+        background: linear-gradient(45deg, #25d366, #128C7E);
+        color: white !important;
     }
-    .chat-input .form-control:focus {
-        background-color: #333333;
-        border-color: var(--highlight-color);
-        color: white;
+
+    .btn-whatsapp:hover {
+        box-shadow: 0 0 15px #25d366;
+        transform: translateY(-2px);
+    }
+
+    .btn-contact {
+        background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+        color: white !important;
+    }
+
+    .btn-contact:hover {
+        box-shadow: 0 0 15px var(--neon-cyan);
+        transform: translateY(-2px);
+    }
+
+    .contact-text {
+        color: var(--neon-cyan);
+        text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+        margin-bottom: 1rem;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<section class="chat-section py-5">
+<section class="chat-section">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -119,7 +228,7 @@
                     
                     <div class="chat-messages" id="chat-messages">
                         <div class="message message-bot">
-                            <p>¡Hola! Soy el asistente virtual de Cristian Urrutia. ¿En qué puedo ayudarte hoy?</p>
+                            <p>¡Hola! Soy el asistente virtual de MoWebCri. ¿En qué puedo ayudarte hoy?</p>
                         </div>
                         
                         <div class="typing-indicator" id="typing-indicator">
@@ -133,7 +242,7 @@
                         <form id="chat-form">
                             <div class="input-group">
                                 <input type="text" class="form-control" id="user-message" placeholder="Escribe tu mensaje...">
-                                <button class="btn btn-warning" type="submit">
+                                <button class="btn" type="submit">
                                     <i class="fas fa-paper-plane"></i>
                                 </button>
                             </div>
@@ -142,12 +251,12 @@
                 </div>
                 
                 <div class="text-center mt-4">
-                    <p class="text-muted">También puedes contactarme por:</p>
-                    <div class="d-flex justify-content-center gap-3">
-                        <a href="https://wa.me/56944020230" class="btn btn-success" target="_blank">
+                    <p class="contact-text">También puedes contactarme por:</p>
+                    <div class="d-flex justify-content-center gap-3 contact-buttons">
+                        <a href="https://wa.me/56944020230" class="btn btn-whatsapp" target="_blank">
                             <i class="fab fa-whatsapp me-2"></i>WhatsApp
                         </a>
-                        <a href="{% url 'contacto' %}" class="btn btn-primary">
+                        <a href="{% url 'contacto' %}" class="btn btn-contact">
                             <i class="fas fa-envelope me-2"></i>Formulario de Contacto
                         </a>
                     </div>

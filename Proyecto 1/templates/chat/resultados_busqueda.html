@@ -1,0 +1,23 @@
+{% if mensajes %}
+<div class="list-group">
+    {% for mensaje in mensajes %}
+    <div class="list-group-item">
+        <div class="d-flex w-100 justify-content-between">
+            <h6 class="mb-1">{{ mensaje.remitente.username }}</h6>
+            <small class="text-muted">{{ mensaje.fecha_envio|date:"d/m/Y H:i" }}</small>
+        </div>
+        <p class="mb-1">{{ mensaje.contenido }}</p>
+        <small class="text-muted">
+            Sala: {{ mensaje.sala.nombre }}
+            {% if mensaje.editado %}
+            <span class="ms-2">(editado)</span>
+            {% endif %}
+        </small>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    No se encontraron mensajes que coincidan con "{{ query }}"
+</div>
+{% endif %} 

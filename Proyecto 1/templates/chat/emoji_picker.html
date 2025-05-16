@@ -1,0 +1,169 @@
+<div class="emoji-picker">
+    <div class="emoji-categories">
+        <button class="btn btn-sm btn-outline-secondary active" data-category="recent">
+            <i class="fas fa-clock"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-secondary" data-category="smileys">
+            <i class="fas fa-smile"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-secondary" data-category="animals">
+            <i class="fas fa-paw"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-secondary" data-category="food">
+            <i class="fas fa-utensils"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-secondary" data-category="activities">
+            <i class="fas fa-futbol"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-secondary" data-category="travel">
+            <i class="fas fa-plane"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-secondary" data-category="objects">
+            <i class="fas fa-lightbulb"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-secondary" data-category="symbols">
+            <i class="fas fa-heart"></i>
+        </button>
+    </div>
+    
+    <div class="emoji-list">
+        <!-- Emojis recientes -->
+        <div class="emoji-category active" id="recent">
+            <div class="emoji-grid">
+                {% for emoji in emojis_recientes %}
+                <button class="emoji-btn" data-emoji="{{ emoji }}">{{ emoji }}</button>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Smileys -->
+        <div class="emoji-category" id="smileys">
+            <div class="emoji-grid">
+                <button class="emoji-btn" data-emoji="😀">😀</button>
+                <button class="emoji-btn" data-emoji="😃">😃</button>
+                <button class="emoji-btn" data-emoji="😄">😄</button>
+                <button class="emoji-btn" data-emoji="😁">😁</button>
+                <button class="emoji-btn" data-emoji="😅">😅</button>
+                <button class="emoji-btn" data-emoji="😂">😂</button>
+                <button class="emoji-btn" data-emoji="🤣">🤣</button>
+                <button class="emoji-btn" data-emoji="😊">😊</button>
+                <button class="emoji-btn" data-emoji="😇">😇</button>
+                <button class="emoji-btn" data-emoji="🙂">🙂</button>
+                <button class="emoji-btn" data-emoji="🙃">🙃</button>
+                <button class="emoji-btn" data-emoji="😉">😉</button>
+                <button class="emoji-btn" data-emoji="😌">😌</button>
+                <button class="emoji-btn" data-emoji="😍">😍</button>
+                <button class="emoji-btn" data-emoji="🥰">🥰</button>
+                <button class="emoji-btn" data-emoji="😘">😘</button>
+                <button class="emoji-btn" data-emoji="😗">😗</button>
+                <button class="emoji-btn" data-emoji="😙">😙</button>
+                <button class="emoji-btn" data-emoji="😚">😚</button>
+                <button class="emoji-btn" data-emoji="😋">😋</button>
+            </div>
+        </div>
+        
+        <!-- Más categorías aquí... -->
+    </div>
+</div>
+
+<style>
+.emoji-picker {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    width: 300px;
+}
+
+.emoji-categories {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 0.5rem;
+}
+
+.emoji-category {
+    display: none;
+}
+
+.emoji-category.active {
+    display: block;
+}
+
+.emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 0.25rem;
+}
+
+.emoji-btn {
+    border: none;
+    background: none;
+    font-size: 1.5rem;
+    padding: 0.25rem;
+    cursor: pointer;
+    border-radius: 0.25rem;
+}
+
+.emoji-btn:hover {
+    background-color: #f8f9fa;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const emojiPicker = document.querySelector('.emoji-picker');
+    const categoryButtons = emojiPicker.querySelectorAll('.emoji-categories button');
+    const categories = emojiPicker.querySelectorAll('.emoji-category');
+    const emojiButtons = emojiPicker.querySelectorAll('.emoji-btn');
+    
+    // Cambiar categoría
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const category = this.dataset.category;
+            
+            // Actualizar botones
+            categoryButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Mostrar categoría
+            categories.forEach(cat => cat.classList.remove('active'));
+            document.getElementById(category).classList.add('active');
+        });
+    });
+    
+    // Seleccionar emoji
+    emojiButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const emoji = this.dataset.emoji;
+            const mensajeId = emojiPicker.dataset.mensajeId;
+            
+            // Guardar emoji reciente
+            let recientes = JSON.parse(localStorage.getItem('emoji_recientes') || '[]');
+            if (!recientes.includes(emoji)) {
+                recientes.unshift(emoji);
+                recientes = recientes.slice(0, 20); // Mantener solo los últimos 20
+                localStorage.setItem('emoji_recientes', JSON.stringify(recientes));
+            }
+            
+            // Enviar reacción
+            fetch(`/chat/mensaje/${mensajeId}/reaccionar/`, {
+                method: 'POST',
+                body: JSON.stringify({ emoji: emoji }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Cerrar el selector
+                    emojiPicker.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script> 

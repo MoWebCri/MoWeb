@@ -1,0 +1,33 @@
+{% if mensajes %}
+<div class="list-group">
+    {% for mensaje in mensajes %}
+    <div class="list-group-item">
+        <div class="d-flex w-100 justify-content-between">
+            <h6 class="mb-1">{{ mensaje.remitente.username }}</h6>
+            <small class="text-muted">{{ mensaje.fecha_envio|date:"H:i" }}</small>
+        </div>
+        <p class="mb-1">{{ mensaje.contenido }}</p>
+        {% if mensaje.archivo_adjunto %}
+        <div class="mt-2">
+            {% if mensaje.tipo_archivo|slice:":5" == 'image' %}
+            <img src="{{ mensaje.archivo_adjunto.url }}" class="img-fluid" style="max-height: 100px;">
+            {% else %}
+            <a href="{{ mensaje.archivo_adjunto.url }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                <i class="fas fa-file"></i> Ver archivo
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+        <small class="text-muted">
+            {% if mensaje.editado %}
+            <span class="ms-2">(editado)</span>
+            {% endif %}
+        </small>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    No se encontraron mensajes que coincidan con "{{ query }}"
+</div>
+{% endif %} 

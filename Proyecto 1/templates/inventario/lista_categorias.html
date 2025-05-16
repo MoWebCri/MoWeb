@@ -1,0 +1,39 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Categorías</h2>
+        <a href="{% url 'crear_categoria' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Nueva Categoría
+        </a>
+    </div>
+
+    <div class="row">
+        {% for categoria in categorias %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ categoria.nombre }}</h5>
+                    <p class="card-text">
+                        <span class="badge {% if categoria.tipo == 'interna' %}bg-primary{% else %}bg-success{% endif %}">
+                            {{ categoria.get_tipo_display }}
+                        </span>
+                    </p>
+                    <p class="card-text">{{ categoria.descripcion|default:"Sin descripción" }}</p>
+                </div>
+                <div class="card-footer text-muted">
+                    Creada: {{ categoria.fecha_creacion|date:"d/m/Y" }}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                No hay categorías registradas. <a href="{% url 'crear_categoria' %}">Crear una nueva categoría</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

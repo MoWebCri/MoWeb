@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h1 class="mb-4">{{ curso.titulo }}</h1>
+            
+            {% if curso.imagen %}
+                <img src="{{ curso.imagen.url }}" alt="{{ curso.titulo }}" class="img-fluid rounded mb-4" style="max-height: 400px; width: 100%; object-fit: cover;">
+            {% else %}
+                <img src="{% static 'img/curso-default.jpg' %}" alt="{{ curso.titulo }}" class="img-fluid rounded mb-4" style="max-height: 400px; width: 100%; object-fit: cover;">
+            {% endif %}
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Descripción</h5>
+                    <p class="card-text">{{ curso.descripcion }}</p>
+                    
+                    {% if curso.contenido %}
+                        <h5 class="card-title mt-4">Contenido del curso</h5>
+                        <p class="card-text">{{ curso.contenido|linebreaks }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm sticky-top" style="top: 2rem;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="card-title mb-0">${{ curso.precio }}</h3>
+                        {% if curso.categoria %}
+                            <span class="badge bg-primary">{{ curso.get_categoria_display }}</span>
+                        {% endif %}
+                    </div>
+
+                    {% if curso.duracion %}
+                        <p class="text-muted mb-3">
+                            <i class="fas fa-clock"></i> Duración: {{ curso.duracion }} horas
+                        </p>
+                    {% endif %}
+
+                    {% if user.is_authenticated %}
+                        {% if comprado %}
+                            <a href="{{ curso.url_moodle }}" class="btn btn-primary w-100 mb-2" target="_blank">
+                                <i class="fas fa-graduation-cap"></i> Acceder al curso
+                            </a>
+                        {% elif en_carrito %}
+                            <div class="alert alert-info mb-3">
+                                <i class="fas fa-info-circle"></i> Este curso ya está en tu carrito
+                            </div>
+                            <a href="{% url 'cursos:ver_carrito' %}" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-shopping-cart"></i> Ver carrito
+                            </a>
+                        {% else %}
+                            <a href="{% url 'cursos:agregar_al_carrito' curso.id %}" class="btn btn-success w-100">
+                                <i class="fas fa-cart-plus"></i> Agregar al carrito
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        <div class="alert alert-warning mb-3">
+                            <i class="fas fa-exclamation-triangle"></i> Debes iniciar sesión para comprar este curso
+                        </div>
+                        <a href="{% url 'usuarios:login' %}?next={{ request.path }}" class="btn btn-primary w-100">
+                            <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

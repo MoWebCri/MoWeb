@@ -1,0 +1,114 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Salas de Chat</h5>
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#crearSalaModal">
+                        <i class="fas fa-plus"></i> Nueva Sala
+                    </button>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for sala in salas %}
+                    <a href="{% url 'chat:sala_chat' sala.id %}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ sala.nombre }}</h6>
+                            <small>{{ sala.ultima_actividad|timesince }}</small>
+                        </div>
+                        <p class="mb-1 text-muted">{{ sala.descripcion|truncatechars:50 }}</p>
+                        <small>
+                            {% if sala.es_grupo %}
+                            <i class="fas fa-users"></i> Grupo
+                            {% else %}
+                            <i class="fas fa-user"></i> Individual
+                            {% endif %}
+                        </small>
+                    </a>
+                    {% empty %}
+                    <div class="list-group-item text-center text-muted">
+                        No hay salas disponibles
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Crear Sala -->
+<div class="modal fade" id="crearSalaModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crear Nueva Sala</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="crearSalaForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="es_grupo" name="es_grupo">
+                        <label class="form-check-label" for="es_grupo">Es un grupo</label>
+                    </div>
+                    <div class="mb-3" id="participantesContainer" style="display: none;">
+                        <label class="form-label">Participantes</label>
+                        <select class="form-select" id="participantes" name="participantes" multiple>
+                            {% for user in usuarios %}
+                            <option value="{{ user.id }}">{{ user.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="crearSalaBtn">Crear Sala</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const esGrupoCheckbox = document.getElementById('es_grupo');
+    const participantesContainer = document.getElementById('participantesContainer');
+    
+    esGrupoCheckbox.addEventListener('change', function() {
+        participantesContainer.style.display = this.checked ? 'block' : 'none';
+    });
+    
+    document.getElementById('crearSalaBtn').addEventListener('click', function() {
+        const form = document.getElementById('crearSalaForm');
+        const formData = new FormData(form);
+        
+        fetch('{% url "chat:crear_sala" %}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                window.location.href = `/chat/sala/${data.sala_id}/`;
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
+{% endblock %} 
