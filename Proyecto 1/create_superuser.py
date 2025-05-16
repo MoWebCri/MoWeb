@@ -1,3 +1,8 @@
+"""
+MoWebCri - Desarrollo Web Profesional
+Script de creación de superusuario
+"""
+
 import os
 import django
 
