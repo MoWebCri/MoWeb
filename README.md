@@ -31,7 +31,7 @@ En MoWebCri desarrollamos plataformas digitales modernas, funcionales y adaptada
 📄 README.md            # Este archivo
 📄 LICENSE              # Licencia del proyecto
 👨‍💻 Autor
-Cristian Urrutia (Fernan)
+Cristian Urrutia
 Analista Programador & Fundador de mowebcri.com
 
 📧 cristian.urrutia.alvarez.20@gmail.com
